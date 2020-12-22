@@ -1,0 +1,16 @@
+{
+  "name": "discord_bot",
+  "version": "1.0.0",
+  "description": "is gaming",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nathan Harris",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "google-auth-library": "^6.1.3",
+    "googleapis": "^64.0.0"
+  }
+}

@@ -1,0 +1,29 @@
+
+{
+	"name":"Dwarf",
+	"desc":"Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal. Though they stand well under 5 feet tall, dwarves are so broad and compact that they can weigh as much as a human standing nearly two feet taller. Their courage and endurance are also easily a match for any of the larger folk.",
+	"statmod":[0,0,2,0,0,0],
+	"speed":25,
+	"lang":["common","dwarvish"],
+	"skillProf":[],
+	"weaponProf":["battleaxe","handaxe","light_hammer","warhammer"],
+	"traits":["Dwarven Resilience. You have advantage on saving throws against poison, and you have resistance against poison damage",
+				"Dwarven Combat Training. You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+				"Darkvision. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can’t discern color in darkness, only shades of gray.",
+				"Tool Proficiency. You gain proficiency with the artisan’s tools of your choice: smith’s tools, brewer’s supplies, or mason’s tools.",
+				"Stonecunning. Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus"],
+	"subrace":[{
+				"name":"Hill Dwarf",
+				"statmod":[0,0,0,0,1,0],
+				"height":"3'8\" +2d4",
+				"weight":"115 *2d6",
+				"traits":["Dwarven Toughness. Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."]
+				},
+				{
+				"name":"Mountain Dwarf",
+				"statmod":[2,0,0,0,0,0],
+				"height":"4'0\" +2d4",
+				"weight":"130 *2d6",
+				"traits":["Dwarven Armor Training. You have proficiency with light and medium armor."]
+				}]
+}
