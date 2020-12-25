@@ -1,16 +1,15 @@
 const Discord = require("discord.js");
-const { BOT_TOKEN, prefix } = require('./config.json');
+const { token, prefix } = require('./config.json');
 const fs = require('fs');
-
-
-const dnd = require('./Dnd.js');
-const math = require('./botMath.js');
-
 
 const client = new Discord.Client();
 global.client = client;
 client.commands = new Discord.Collection();
 
+global.dndmode = false;
+
+
+//compile all commands into a collection
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -19,6 +18,7 @@ for (const file of commandFiles) {
 }
 
 
+//ready message
 client.once('ready', () => {
    console.log('Ready!');
 });
@@ -26,7 +26,8 @@ client.once('ready', () => {
 //checks for commands
 client.on("message", function(message) { 
    //if the message if from another bot or doesn't start with the prefix, ignore
-   if (message.author.bot || !message.content.startsWith(prefix)) return;
+   console.log("dndmode in index is " + dndmode)
+   if (message.author.bot || (!dndmode && !message.content.startsWith(prefix))) return;
 
    //separates command prefix from command
    const commandBody = message.content.slice(prefix.length);
@@ -43,32 +44,61 @@ client.on("message", function(message) {
   			client.commands.get("ping").execute(prefix, message, args);
     		break;
 
-    	case "sum":
-         client.commands.get("sum").execute(prefix, message, args);
+    	//see add.js
+    	case "add":
+         client.commands.get("add").execute(prefix, message, args);
          break;
 
+      //see subtract.js
+    	case "subtract":
+         client.commands.get("subtract").execute(prefix, message, args);
+         break;
+
+      //see pow.js
     	case "pow":
          client.commands.get("pow").execute(prefix, message, args);
          break;
 
+      //see subtract.js
+    	case "fac":
+         client.commands.get("fac").execute(prefix, message, args);
+         break;
+
+      //see roll.js
       case "roll":
          client.commands.get("roll").execute(prefix, message, args);
          break;
 
+      //see createChar.js
       case "createChar":
-         dnd.createChar(message, args[0]);
+         client.commands.get("createChar").execute(prefix, message, args);
          break;
 
+      //moves back on step in createChar
+      case "reverse":
+      	if (dndmode)
+         	client.commands.get("createChar").execute(prefix, message, args);
+         break;
+
+      //prints the chosen dnd charSheet
       case "printChar":
-         dnd.printChar(message, args[0])
+      	message.channel.send("Out of Service");
+      	break;
 
-      case "jsonincrement":
-         dnd.jsonincrement();
-         mainCmdActive = false;
-         console.log("mainCmdActive is " + mainCmdActive)
-         break;
+     	//exits out of dndmode (and any other modes if I implement them later)
+      case "exit":
+      	dndmode = false;
+      	message.channel.send("You've exited the current mode and can type regularly")
+      	break;
+
+      default:
+        	console.log("we reached the dnd switch")
+      	if (dndmode && client.commands.get("createChar").config.author == message.author) {
+      		client.commands.get("createChar").execute(prefix, message, args);
+      	}
+      	break;
 
   	}                                 
 });                                     
 
-client.login(BOT_TOKEN);
+client.login(token);
