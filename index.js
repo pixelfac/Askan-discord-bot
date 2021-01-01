@@ -26,13 +26,12 @@ client.once('ready', () => {
 //checks for commands
 client.on("message", function(message) { 
    //if the message if from another bot or doesn't start with the prefix, ignore
-   console.log("dndmode in index is " + dndmode)
    if (message.author.bot || (!dndmode && !message.content.startsWith(prefix))) return;
 
    //separates command prefix from command
    const commandBody = message.content.slice(prefix.length);
    //separates command into array separated by ' '
-  	const args = commandBody.split(' ');
+  	var args = commandBody.split(' ');
   	//gets first item in array, args
   	const command = args.shift();
 
@@ -42,6 +41,11 @@ client.on("message", function(message) {
   		//"ping" command
   		case "ping":
   			client.commands.get("ping").execute(prefix, message, args);
+    		break;
+
+    	//see gn.js
+    	case "gn":
+    		client.commands.get("gn").execute(prefix, message, args)
     		break;
 
     	//see add.js
@@ -77,7 +81,7 @@ client.on("message", function(message) {
       //moves back on step in createChar
       case "reverse":
       	if (dndmode)
-         	client.commands.get("createChar").execute(prefix, message, args);
+         	client.commands.get("createChar").execute(prefix, message, message.content, args);
          break;
 
       //prints the chosen dnd charSheet
@@ -88,13 +92,16 @@ client.on("message", function(message) {
      	//exits out of dndmode (and any other modes if I implement them later)
       case "exit":
       	dndmode = false;
+      	client.commands.get("createChar").execute(prefix, message, message.content, args);
       	message.channel.send("You've exited the current mode and can type regularly")
       	break;
 
       default:
-        	console.log("we reached the dnd switch")
+      	//reformats var args to not consider a command keyword
+      	args = message.content.split(' ');
+
       	if (dndmode && client.commands.get("createChar").config.author == message.author) {
-      		client.commands.get("createChar").execute(prefix, message, args);
+      		client.commands.get("createChar").execute(prefix, message, message.content, args);
       	}
       	break;
 
