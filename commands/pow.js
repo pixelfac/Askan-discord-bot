@@ -6,7 +6,7 @@ module.exports = {
           	message.channel.send(`insufficient parameters. There must be only 2 terms after command: \`${prefix}pow 2 3\``);
           	return;
     	}
-    	console.log(args)
+
         if (isFinite(args[0]) && isFinite(args[1])) {
         	message.channel.send(args[0] + "^" + args[1] + " = " + Math.pow(args[0],args[1]));
         	return;

@@ -8,7 +8,6 @@ module.exports = {
 			return;
 		}
 		var diceArr = args[0].split('d');
-		console.log(diceArr);
 		//error catch
 		if (diceArr.length > 2) {
 			message.channel.send(`Too many dice! Please only use one multiplier and one die face indicator: \`${prefix}roll d12\``);
