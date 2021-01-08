@@ -225,24 +225,33 @@ module.exports = {
 				currentStep += 1
 				break;
 
-			case 7: //processes feature
+			case 7: //processes features
 				if (!isReverse) {
 						
 					index = 1;
+					//switch used to detect if user inputed valid option
+					let noMatch = true;
 					for (let feat in chosenClass.features.choselvl1) {
 						if (content == index) {
 							//adds chosen feature to list of charSheet Features
 							charSheet.features[feat] = chosenClass.features.choselvl1[feat];
 							message.channel.send(`\`${feat}\` has been added to your character sheet`)
+							noMatch = false;
+							break;
 						}
 						index++;
+					}
+
+					//out of bounds response catch
+					if (noMatch) {
+						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${content}'. Please try again.`);
+						return;
 					}
 
 				}
 
 				message.reply("Please enter your race")
 				currentStep += 1
-				console.log(charSheet)
 				break;
 
 			case 8:
