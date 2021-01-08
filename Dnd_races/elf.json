@@ -1,0 +1,74 @@
+{
+	"name":"Elf",
+	"desc":"Elves are a magical people of otherworldly grace, living in the world but not entirely part of it. They live in places of ethereal beauty, in the midst of ancient forests or in silvery spires glittering with faerie light, where soft music drifts through the air and gentle fragrances waft on the breeze. Elves love nature and magic, art and artistry, music and poetry, and the good things of the world.",
+	"statmod":[0,2,0,0,0,0],
+	"speed":30,
+	"lang":["common","elvish"],
+	"skillProf":["perception"],
+	"weaponProf":[],
+	"features":{
+				"Darkvision":{
+					"desc":"You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can’t discern color in darkness, only shades of gray."
+				},
+				"Fey Ancestry":{
+					"desc":"You have advantage on saving throws against being charmed, and magic can’t put you to sleep."
+				},
+				"Trance":{
+					"desc":"Elves don’t need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is “trance.”) While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep."
+				}
+			},
+	"subrace":[{
+				"name":"High Elf",
+				"statmod":[0,0,0,1,0,0],
+				"height":"4'6\" +2d10",
+				"weight":"90 *1d4",
+				"features":{
+							"Elf Weapon Training":{
+								"desc":"You have proficiency with the longsword, shortsword, shortbow, and longbow."
+							},
+							"Cantrip":{
+								"desc":"You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it."
+							},
+							"Extra Language":{
+							"desc":"You can speak, read, and write one extra language of your choice."
+							}
+						}
+				},
+				{
+				"name":"Wood Elf",
+				"statmod":[0,0,0,0,1,0],
+				"height":"4'6\" +2d10",
+				"weight":"100 *1d4",
+				"featuers":{
+							"Elf Weapon Training":{
+								"desc":"You have proficiency with the longsword, shortsword, shortbow, and longbow."
+							},
+							"Fleet of Foot":{
+								"desc":"Your base walking speed increases to 35 feet."
+							},
+							"Mask of the Wild":{
+								"desc":"You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
+							}
+						}
+				},
+				{
+				"name":"Drow Elf",
+				"statmod":[0,0,0,0,0,1],
+				"height":"4'5\" +2d6",
+				"weight":"75 *1d6",
+				"features":{
+							"Superior Darkvision":{
+								"desc":"Your darkvision has a radius of 120 feet."
+							},
+							"Sunlight Sensitivity":{
+								"desc":"You have disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight when you, the target of your attack, or anything you are trying to percieve is in direct sunlight."
+							},
+							"Drow Magic":{
+								"desc":"You know the 'dancing lights' cantrip. At 3rd level, you can cast 'faerie fire' once per long rest. At 5th level, you can cast 'darkness' once per long rest. Charisma is your spellcasting modifier."
+							},
+							"Drow Weapon Training":{
+								"desc":"You have proficieny withg rapiers, shortswords, and hand crossbows."
+							}
+						}
+				}]
+}

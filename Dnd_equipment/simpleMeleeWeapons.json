@@ -1,0 +1,102 @@
+[
+    {
+        "Name": "Club",
+        "Cost": "1 sp",
+        "Damage": "1d4",
+        "Damagetype": "Bludgeoning",
+        "Weight": "2 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Light"
+        ]
+    },
+    {
+        "Name": "Greatclub",
+        "Cost": "2 sp",
+        "Damage": "1d8",
+        "Damagetype": "Bludgeoning",
+        "Weight": "10 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Two-handed"
+        ]
+    },
+    {
+        "Name": "Handaxe",
+        "Cost": "5 gp",
+        "Damage": "1d6",
+        "Damagetype": "Slashing",
+        "Weight": "2 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Light", 
+            "Thrown (20/60)" 
+        ]
+    },
+    {
+        "Name": "Javelin",
+        "Cost": "5 sp",
+        "Damage": "1d6",
+        "Damagetype": "Piercing",
+        "Weight": "2 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Thrown (30/120)"
+        ]
+    },
+    {
+        "Name": "Light Hammer",
+        "Cost": "2 gp",
+        "Damage": "1d4",
+        "Damagetype": "Bludgeoning",
+        "Weight": "2 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Light",
+            "Thrown (20/60)"
+        ]
+    },
+    {
+        "Name": "Mace",
+        "Cost": "5 gp",
+        "Damage": "1d6",
+        "Damagetype": "Bludgeoning",
+        "Weight": "2 lb",
+        "Homebrew": "False",
+        "Properties": []
+    },
+    {
+        "Name": "Quarterstaff",
+        "Cost": "2 sp",
+        "Damage": "1d6",
+        "Damagetype": "Bludgeoning",
+        "Weight": "4 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Versatile (1d8)"
+        ]
+    },
+    {
+        "Name": "Sickle",
+        "Cost": "1 gp",
+        "Damage": "1d4",
+        "Damagetype": "Slashing",
+        "Weight": "2 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Light"
+        ]
+    },
+    {
+        "Name": "Spear",
+        "Cost": "1 gp",
+        "Damage": "1d4",
+        "Damagetype": "Slashing",
+        "Weight": "3 lb",
+        "Homebrew": "False",
+        "Properties": [ 
+            "Thrown (20/60)",
+            "Versatile (1d8)"
+        ]
+    },
+]

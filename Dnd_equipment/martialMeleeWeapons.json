@@ -1,0 +1,162 @@
+[
+    {
+        "Name": "Battleaxe",
+        "Cost": "10 gp",
+        "Damage": "1d8 slashing",
+        "Weight": "4 lb",
+        "Properties": [
+        	"Versatile (1d10)"
+        ]
+    },
+    {
+        "Name": "Flail",
+        "Cost": "10 gp",
+        "Damage": "1d8 bludgeoning",
+        "Weight": "2 lb",
+        "Properties": []
+    },
+    {
+        "Name": "Glaive",
+        "Cost": "20 gp",
+        "Damage": "1d10 slashing",
+        "Weight": "6 lb",
+        "Properties": [
+            "Heavy",
+            "Reach",
+            "Two-Handed"
+        ]
+    },
+    {
+        "Name": "Greataxe",
+        "Cost": "30 gp",
+        "Damage": "1d12 slashing",
+        "Weight": "7 lb",
+        "Properties": [
+            "Heavy",
+            "Two-Handed"
+        ]
+    },
+    {
+        "Name": "Greatsword",
+        "Cost": "50 gp",
+        "Damage": "2d6 slashing",
+        "Weight": "6 lb",
+        "Properties": [
+            "Heavy",
+            "Two-Handed"
+        ]
+    },
+    {
+        "Name": "Halberd",
+        "Cost": "20 gp",
+        "Damage": "1d10 slashing",
+        "Weight": "6 lb",
+        "Properties": [
+            "Heavy",
+            "Reach",
+            "Two-Handed"
+        ]
+    },
+    {
+        "Name": "Heavy Flail",
+        "Cost": "20 gp",
+        "Damage": "1d12 bludgeoning",
+        "Weight": "7 lb",
+        "Properties": [
+        	"Heavy", 
+        	"Two-Handed"
+        ]
+    },
+    {
+        "Name": "Longsword",
+        "Cost": "15 gp",
+        "Damage": "1d8 slashing",
+        "Weight": "3 lb",
+        "Properties": [
+            "Versatile (1d10)"
+        ]
+    },
+    {
+        "Name": "Maul",
+        "Cost": "10 gp",
+        "Damage": "2d6 bludgeoning",
+        "Weight": "10 lb",
+        "Properties": [
+            "Heavy",
+            "Two-Handed"
+        ]
+    },
+    {
+        "Name": "Morningstar",
+        "Cost": "15 gp",
+        "Damage": "1d8 piercing",
+        "Weight": "4 lb",
+        "Properties": []
+    },
+    {
+        "Name": "Pike",
+        "Cost": "5 gp",
+        "Damage": "1d10 piercing",
+        "Weight": "18 lb",
+        "Properties": [
+            "Heavy",
+            "Reach",
+            "Two-Handed"
+        ]
+    },
+    {
+        "Name": "Rapier",
+        "Cost": "25 gp",
+        "Damage": "1d8 piercing",
+        "Weight": "2 lb",
+        "Properties": [
+            "Finesse"
+        ]
+    },
+    {
+        "Name": "Scimitar",
+        "Cost": "25 gp",
+        "Damage": "1d6 slashing",
+        "Weight": "3 lb",
+        "Properties": [
+            "Light", 
+            "Finesse"
+        ]
+    },
+    {
+        "Name": "Shortsword",
+        "Cost": "10 gp",
+        "Damage": "1d6 piercing",
+        "Weight": "2 lb",
+        "Properties": [
+            "Light", 
+            "Finesse"
+        ]
+    },
+    {
+        "Name": "War Pick",
+        "Cost": "5 gp",
+        "Damage": "1d8 piercing",
+        "Weight": "2 lb",
+        "Properties": []
+    },
+    {
+        "Name": "War Hammer",
+        "Cost": "15 gp",
+        "Damage": "1d8 bludgeoning",
+        "Weight": "2 lb",
+        "Properties": [
+            "Versatile (1d10)"
+        ]
+    },
+    {
+        "Name": "Whip",
+        "Cost": "2 gp",
+        "Damage": "1d4 slashing",
+        "Weight": "3 lb",
+        "Properties": [
+            "Reach", 
+            "Finesse"
+        ]
+    },
+]

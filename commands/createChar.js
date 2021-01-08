@@ -60,7 +60,7 @@ module.exports = {
 
 				//create and print a string of the class options
 				reply = `Please enter your class\n\`\`\``;
-				let index = 1;
+				index = 1;
 				for (let cls in classes) {
 					reply += `[${index}] ${classes[cls].name}\n`
 					index++;
@@ -76,12 +76,12 @@ module.exports = {
 				if (!isReverse) {
 
 					//iterate through all currently implemented classes and if content matches the class name, assign those class values to the charSheet
-					let classIndex = 1;
+					index = 1;
 					for (let cls in classes) {
-						if (content == classIndex) {
+						if (content == index) {
 							chosenClass = classes[cls];
 							//set target class to lvl 1
-							charSheet.class[classIndexFromName(cls)] = 1;
+							charSheet.class[cls] = 1;
 							charSheet.hitDice = classes[cls].hitDice;
 							charSheet.hp = classes[cls].hp;
 							charSheet.hpMax = classes[cls].hp;
@@ -98,14 +98,14 @@ module.exports = {
 							charSheet.weaponProf.push(...classes[cls].weaponProf)
 							break;
 						}
-						classIndex++;
+						index++;
 
 
 					}
 
 					//out of bounds response catch
 					if (charSheet.hp === 0) {
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${classIndex-1} and I received '${content}'. Please try again.`);
+						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${content}'. Please try again.`);
 						return;
 					}
 
@@ -119,10 +119,10 @@ module.exports = {
 				reply = `Pick 2 skills from the following list. Input for choices with a space in between, i.e. \`1 3\` to pick the first and third skills\n\`\`\``
 				//prints formatted list of all skills for each class
 
-				let skillIndex = 1;
+				index = 1;
 				for (skill of chosenClass.skillProf) {
-					reply += `[${skillIndex}] ${skill}\n`;
-					skillIndex++;
+					reply += `[${index}] ${skill}\n`;
+					index++;
 				}
 				reply += `\`\`\``
 
@@ -140,17 +140,24 @@ module.exports = {
 						return;
 					}
 
+					if (args[0] == args[1]) {
+						message.channel.send("The arguments you have provided are the same. I am looking for 2 different numbers. E.G. `1 3`")
+						return;
+					}
+
 					//select skills from input and add to charSheet
-					let skillIndex = 1;
+					index = 1;
 					for (skill of chosenClass.skillProf) {
-						if (skillIndex == args[0] || skillIndex == args[1])
-							charSheet.skillProf.push(chosenClass.skillProf[skillIndex-1])
-						skillIndex++;
+						if (index == args[0] || index == args[1])
+							charSheet.skillProf.push(chosenClass.skillProf[index-1])
+						index++;
 					}
 
 					//if user input didn't match expected range
-					if (charSheet.skillProf.length < 2)
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${skillIndex-1} and I received '${args[0]} and ${args[1]}'. Please try again.`);
+					if (charSheet.skillProf.length < 2) {
+						message.channel.send(`Your input was not valid. I was expecting 2 integers between 1 and ${index-1} and I received '${args[0]} and ${args[1]}'. Please try again.`);
+						return;
+					}
 					
 					message.channel.send(`The skills \`${charSheet.skillProf[0]}\` and \`${charSheet.skillProf[1]}\` have been added to your list of proficiencies.`)
 				}
@@ -173,7 +180,20 @@ module.exports = {
 					message.reply(reply)
 
 				}
-				else currentStep += 1
+				else {
+					//if chosenClass needs to select a 1st level Feature
+					if ("choselvl1" in chosenClass.features) {
+						//stores correct message in chose1stFeatureReply
+						chose1stFeature(chosenClass)
+						//prints message to user
+						message.reply(chose1stFeatureReply)
+					}
+					else {
+						message.reply("Please enter your race")
+						currentStep += 1
+					}
+					currentStep += 1
+				}
 				currentStep += 1
 				break;
 
@@ -182,16 +202,23 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your race")
+				//if chosenClass needs to select a 1st level Feature
+				if (chose1stFeature(chosenClass)) {
+					message.reply(chose1stFeatureReply)
+				}
+				else {
+					message.reply("Please enter your race")
+					currentStep += 1
+				}
 				currentStep += 1
 				break;
 
-			case 7:
+			case 7: //processes feature
 				if (!isReverse) {
 					
 				}
 
-				message.reply("Please enter your race ability scores")
+				message.reply("Please enter your race")
 				currentStep += 1
 				break;
 
@@ -200,7 +227,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your ability scores")
+				message.reply("Please enter your race ability scores")
 				currentStep += 1
 				break;
 
@@ -209,7 +236,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your height")
+				message.reply("Please enter your ability scores")
 				currentStep += 1
 				break;
 
@@ -218,7 +245,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your alignment")
+				message.reply("Please enter your height")
 				currentStep += 1
 				break;
 
@@ -227,7 +254,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your background")
+				message.reply("Please enter your alignment")
 				currentStep += 1
 				break;
 
@@ -236,7 +263,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your background languages")
+				message.reply("Please enter your background")
 				currentStep += 1
 				break;
 
@@ -245,7 +272,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your background equipment")
+				message.reply("Please enter your background languages")
 				currentStep += 1
 				break;
 
@@ -254,7 +281,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your background tools")
+				message.reply("Please enter your background equipment")
 				currentStep += 1
 				break;
 
@@ -263,7 +290,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your background traits")
+				message.reply("Please enter your background tools")
 				currentStep += 1
 				break;
 
@@ -272,7 +299,7 @@ module.exports = {
 					
 				}
 
-				message.reply("Please enter your background ideals")
+				message.reply("Please enter your background traits")
 				currentStep += 1
 				break;
 
@@ -281,11 +308,20 @@ module.exports = {
 					
 				}
 
+				message.reply("Please enter your background ideals")
+				currentStep += 1
+				break;
+
+			case 18:
+				if (!isReverse) {
+					
+				}
+
 				message.reply("Please enter your background bonds")
 				currentStep += 1
 				break;
 
-			case 18:	
+			case 19:	
 					if (!isReverse) {
 					
 				}
@@ -294,10 +330,8 @@ module.exports = {
 				currentStep += 1
 				break;
 
-			case 19:
-				if (!isReverse) {
-					
-				}
+			case 20:
+				
 
 				message.reply("You have now finished character creation")
 				currentStep = 0
@@ -305,6 +339,15 @@ module.exports = {
 				module.exports.config.author = 0
 
 				//add CON mod to charSheet.hp and charSheet.hpMax and charSheet.hpPerLevel
+
+				
+				let charPath = `../Dnd_chars/${charSheet.name}.json`;
+
+				//saves file
+				fs.writeFile(charPath,JSON.stringify(charSheet), function (err, file) {
+  				if (err) throw err;
+				});
+				console.log("Created!");
 
 				//resets charSheet JSON
 				//only execute after charSheet has been saved to a file
@@ -319,20 +362,39 @@ module.exports = {
 
 module.exports.config = { "author":0 }
 
+//---'Class' Variables---//
 
 //toogle var to avoid processing '~reverse' as an answer when that command is used
 var isReverse = false;
 
+//tracks the current step of char creation
+var currentStep = 0;
+
+//Character Sheet JSON
+var charSheet = { }
+
+//stores JSON of currently chosenClass
+var chosenClass = { }
+
+//stores reply from chose1stFeature
+var chose1stFeatureReply = "";
+
+//general purpose index for generating numbered lists
+var index = 1;
+
+
+
+//---'Class' Variables---//
+
 
 const { token, prefix } = require('../config.json');
+const fs = require('fs') ;
 
 // Character Creation Enum
-const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "RACE", "RACE_ability-scores",
+const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
 						"ABILITY_SCORES", "HEIGHT","ALIGNMENT", "BACKGROUND", "BACKGROUND_lang",
 						"BACKGROUND_equipment", "BACKGROUND_tools", "BACKGROUND_traits","BACKGROUND_ideals",
 						"BACKGROUND_bonds", "BACKGROUND_flaws" ]
-
-var currentStep = 0;
 
 
 //---Formating Info---//
@@ -342,8 +404,7 @@ arrays thay reference the ability scores like "statmod" arrays are ordered [STR,
 
 charSheet JSON Notes
 
-"class" array is ordered [BARB, BARD, CLERIC, DRUID, FIGHT, MONK, PALA, RNG, ROG, SORC, WARL, WIZ]
-"class" array is int array that store each level invested into each class. That info will be converted into String via a function
+"class" array is int JSON that stores each level invested into each class. That info will be converted into String via a function
 
 "skillProf", "weaponProf", and "toolProf" are String arrays that store the names of all skills/weapons/tools that the player if proficient at
 
@@ -354,8 +415,7 @@ charSheet JSON Notes
 */
 //---Formatting Info---//
 
-//Character Sheet JSON
-var charSheet = { }
+
 
 //template character sheet JSON used to reset the charSheet after a character is created
 //is instantiated at first step
@@ -365,7 +425,19 @@ var templateCharSheet = {
 			"race":{},
 			"subrace":{},
 			"level":1,
-			"class":[0,0,0,0,0,0,0,0,0,0,0,0],
+			"class": {  "Barbarian":0,
+						"Bard":0,
+						"Cleric":0,
+						"Druid":0,
+						"Fighter":0,
+						"Monk":0,
+						"Paladin":0,
+						"Ranger":0,
+						"Sorcerer":0,
+						"Warlock":0,
+						"Wizard":0,
+					},
+			"features":[],
 			"armorProf":[],
 			"toolProf":[],
 			"weaponProf":[],
@@ -403,17 +475,17 @@ const templateRace = {
 	"lang":[],
 	"skillProf":[],
 	"weaponProf":[],
-	"traits":[],
+	"features":[],
 	"subrace":[{
 				"name":"",
 				"statmod":[0,0,0,0,0,0],
-				"traits":[]
+				"features":[]
 				}]
 }
 
 //import all race require() objects
-const dwarf = require("../race_dwarf.json");
-const elf = require("../race_elf.json");
+const dwarf = require("../Dnd_races/dwarf.json");
+const elf = require("../Dnd_races/elf.json");
 
 //update for each race added above
 const raceDesc = `[1] ${dwarf.name}\n[2] ${elf.name}`
@@ -422,8 +494,6 @@ const raceDesc = `[1] ${dwarf.name}\n[2] ${elf.name}`
 
 
 //---Class Info---//
-
-var chosenClass = { }
 
 const templateClass = {
 		"name":"",
@@ -438,7 +508,16 @@ const templateClass = {
 		"weaponProf":[],
 		"toolProf":[],
 		"savingThrows":[0,0,0,0,0,0],
-		"skillProf":[]
+		"skillProf":[],
+		//list of all class features, a description of what they do, and what level they come at
+		//choosing and archetype at lvl 3 will add features to this JSON
+		"features":{
+					"<name>":{
+						"desc":"",
+						"level":0
+					}
+				},
+		"equipment":[],
 
 }
 
@@ -458,50 +537,137 @@ const classes = {
 		"savingThrows":[1,0,1,0,0,0],
 		//list of all the skills that the class can have proficiency in
 		"skillProf":["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"],
+		"features":{
+					"choselvl1":{
+						"Archery":{
+							"desc":"You gain a +2 bonus to attack rolls you make with ranged weapons.",
+							"level":1
+						},
+						"Defense":{
+							"desc":"While you are wearing armor, you gain a +1 bonus to AC.",
+							"level":1
+						},
+						"Dueling":{
+							"desc":"When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+							"level":1
+						},
+						"Great Weapon Fighting":{
+							"desc":"When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.",
+							"level":1
+						},
+						"Protection":{
+							"desc":"When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.",
+							"level":1
+						},
+						"Two-Weapon Fighting":{
+							"desc":"When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
+							"level":1
+						},
+					},
+					"Second Wind":{
+						"desc":"You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+						"level":1
+					},
+					"Action Surge":{
+						"desc":"Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action. Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
+						"level":2
+					},
+					"Martial Archetype":{
+						"desc":"At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. Choose Champion, Battle Master, or Eldritch Knight, all detailed at the end of the class description. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level.",
+						"level":3
+					},
+					"Ability Score Improvement":{
+						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+						"level":4
+					},
+					"Extra Attack":{
+						"desc":"You can attack twice, instead of once, whenever you take the Attack action on your turn.",
+						"level":5
+					},
+					"Ability Score Improvement":{
+						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+						"level":6
+					},
+					"Ability Score Improvement":{
+						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+						"level":8
+					},
+					"Indomitable":{
+						"desc":"You can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can’t use this feature again until you finish a long rest.",
+						"level":9
+					},
+					"Extra Attack":{
+						"desc":"You can attack thrice, instead of twice, whenever you take the Attack action on your turn.",
+						"level":11
+					},
+					"Ability Score Improvement":{
+						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+						"level":12
+					},
+					"Indomitable":{
+						"desc":"You can use the Indomitable feature twice between long rests.",
+						"level":13
+					},
+					"Ability Score Improvement":{
+						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+						"level":14
+					},
+					"Ability Score Improvement":{
+						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+						"level":16
+					},
+					"Indomitable 3":{
+						"desc":"You can use the Indomitable feature thrice between long rests.",
+						"level":17
+					},
+					"Action Surge 2":{
+						"desc":"You can use the Action Surge feature twice before a rest, but only once on the same turn.",
+						"level":17
+					},
+					"Ability Score Improvement":{
+						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+						"level":19
+					},
+					"Extra Attack":{
+						"desc":"You can attack 4 times, instead of 3, whenever you take the Attack action on your turn.",
+						"level":20
+					},
+				},
+		"equipment":[],
+		},
+
 
 	}
-	
-}
+
+
+const classSpellList = require('../Dnd_classes/classSpellList.json');
 //---Class Info---//
 
 
 //---Helper Functions---//
 
-function classIndexFromName(name) {
-	switch (name) {
+//writes to chose1stFeatureReply the options that a class has as their first feature 
+function chose1stFeature(chosenClass) {
 
-//"class" array is ordered [BARB, BARD, CLERIC, DRUID, FIGHT, MONK, PALA, RNG, ROG, SORC, WARL, WIZ]
+	switch (chosenClass.name) {
 
-		case "barbarian":
-			return 0;
-		case "bard":
-			return 1;
-		case "cleric":
-			return 2;
-		case "druid":
-			return 3;
-		case "fighter":
-			return 4;
-		case "monk":
-			return 5;
-		case "paladin":
-			return 6;
-		case "ranger":
-			return 7;
-		case "rogue":
-			return 8;
-		case "sorcerer":
-			return 9;
-		case "warlock":
-			return 10;
-		case "wizard":
-			return 11;
+		case "Fighter":
+			chose1stFeatureReply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n";
 
-		//error message for if 'name' is not contained within this function
+			index = 1;
+			for (let style in chosenClass.features.choselvl1) {
+
+			}
+			return true;
+			break;
+
 		default:
-			console.log("classIndexFromName name not found error")
-			return -1;
+			chose1stFeatureReply = "ERROR: chosenClass was believed to have 1st level feature otpions but does not";
+			break;
+
 	}
+
 }
+
 
 //---Helper Functions---//
