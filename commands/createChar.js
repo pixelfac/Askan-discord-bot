@@ -177,11 +177,12 @@ module.exports = {
 
 				reply = `Pick equipment from the following list.\n\`\`\`neat`;
 
-				for (var arr in chosenClass.equipment)
-					console.log(chosenClass.equipment[arr])
-					if (chosenClass.equipment[arr].includes("Any Martial Weapon"))
+				for (let arr in chosenClass.equipment) {
+					//prints all martial weapons if possible
+					if (Array.isArray(chosenClass.equipment[arr]) && chosenClass.equipment[arr].includes("Any Martial Weapon"))
 						console.log(allMartialWeapons())
 					else console.log(chosenClass.equipment[arr])
+				}
 
 
 				reply += `\`\`\``
@@ -760,7 +761,6 @@ function allMartialWeapons() {
 	for (let weap of martialRangedWeapons)
 		list.push(weap.Name)
 
-	console.log(list)
 	return list
 }
 
