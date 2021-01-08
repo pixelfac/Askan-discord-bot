@@ -78,8 +78,12 @@ client.on("message", function(message) {
          client.commands.get("createChar").execute(prefix, message, args);
          break;
 
+
+
       //moves back on step in createChar
       case "reverse":
+      case "r":
+      case "REVERSE":
       	if (dndmode)
          	client.commands.get("createChar").execute(prefix, message, message.content, args);
          break;
@@ -91,6 +95,8 @@ client.on("message", function(message) {
 
      	//exits out of dndmode (and any other modes if I implement them later)
       case "exit":
+      case "x":
+      case "EXIT":
       	dndmode = false;
       	client.commands.get("createChar").execute(prefix, message, message.content, args);
       	message.channel.send("You've exited the current mode and can type regularly")

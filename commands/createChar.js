@@ -2,13 +2,12 @@ module.exports = {
 	name: "createChar",
 	description: "Walks you through the process of creating a Dnd character from scratch",
 	execute(prefix, message, content, args) {
-		dndmode = true;
 		module.exports.config.author = message.author;
 		//instance variable
 		var reply = "";
 
 		//if user uses 'reverse' command, move back one step
-		if (message.content.startsWith(`${prefix}reverse`)) {
+		if (message.content.startsWith(`${prefix}reverse`) || message.content.startsWith(`${prefix}r`) || message.content.startsWith(`${prefix}REVERSE`)) {
 			currentStep -= 2;
 			if (currentStep < 0)
 				currentStep = 0;
@@ -16,11 +15,16 @@ module.exports = {
 		}
 
 		//if user uses 'exit' command, reset current step to reset the createChar process
-		if (message.content.startsWith(`${prefix}exit`)) {
+		if (message.content.startsWith(`${prefix}exit`) || message.content.startsWith(`${prefix}x`) || message.content.startsWith(`${prefix}EXIT`)) {
 			currentStep = 0;
 			charSheet = JSON.parse(JSON.stringify(templateCharSheet));
+			dndmode = false;
 			return;
 		}
+
+		//dndmode switch
+		dndmode = true;
+
 
 		switch (currentStep) {
 
@@ -652,12 +656,14 @@ function chose1stFeature(chosenClass) {
 	switch (chosenClass.name) {
 
 		case "Fighter":
-			chose1stFeatureReply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n";
+			chose1stFeatureReply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n```";
 
 			index = 1;
 			for (let style in chosenClass.features.choselvl1) {
-
+				chose1stFeatureReply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n`
+				index++;
 			}
+			chose1stFeatureReply += "```";
 			return true;
 			break;
 
