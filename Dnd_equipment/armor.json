@@ -1,5 +1,6 @@
 {
-	"chain": { },
-	"leather": { },
+	"Chain Mail": { },
+	"Leather Armor": { },
+	"Shield":{ }
 
 }

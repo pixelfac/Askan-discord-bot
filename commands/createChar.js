@@ -125,7 +125,7 @@ module.exports = {
 
 
 
-				reply = `Pick 2 skills from the following list. Input for choices with a space in between, i.e. \`1 3\` to pick the first and third skills\n\`\`\``
+				reply = `Pick 2 skills from the following list. Input your choices with a space in between, i.e. \`1 3\` to pick the first and third skills\n\`\`\``
 				//prints formatted list of all skills for each class
 
 				index = 1;
@@ -172,9 +172,24 @@ module.exports = {
 				}
 
 
-				message.reply("Please enter your class equipment")
+
+
+
+				reply = `Pick equipment from the following list.\n\`\`\`neat`;
+
+				for (var arr in chosenClass.equipment)
+					console.log(chosenClass.equipment[arr])
+					if (chosenClass.equipment[arr].includes("Any Martial Weapon"))
+						console.log(allMartialWeapons())
+					else console.log(chosenClass.equipment[arr])
+
+
+				reply += `\`\`\``
+
+				message.reply(reply)
 				currentStep += 1
 				break;
+
 
 			case 5: //processes class equipment
 				if (!isReverse) {
@@ -205,6 +220,7 @@ module.exports = {
 				}
 				currentStep += 1
 				break;
+
 
 			case 6: //processes spells
 				if (!isReverse) {
@@ -422,6 +438,10 @@ var index = 1;
 const { token, prefix } = require('../config.json');
 const fs = require('fs') ;
 
+//import weapon arrays
+const martialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons.json');
+const martialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons.json');
+
 // Character Creation Enum
 const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
 						"ABILITY_SCORES", "HEIGHT","ALIGNMENT", "BACKGROUND", "BACKGROUND_lang",
@@ -443,6 +463,11 @@ charSheet JSON Notes
 "spells" is an array that stores all of the spell objects that a character possesses
 
 "sex" parameter is 0 = female, 1 = male
+
+
+in class json:
+equipment JSON has property, 'free', which is String arr of equipment that don't require use input
+also has 'opt' properties which store the options the player has to chose between
 
 */
 //---Formatting Info---//
@@ -549,7 +574,15 @@ const templateClass = {
 						"level":0
 					}
 				},
-		"equipment":[],
+		"equipment":{
+			//semicolons are used as delimiters between items in the string
+			//when nothing is given without player input, 'free' array is empty
+			"free":[""],
+			"opt1":{
+				"a":[""],
+				"b":[""]
+			}
+		},
 
 }
 
@@ -570,106 +603,120 @@ const classes = {
 		//list of all the skills that the class can have proficiency in
 		"skillProf":["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"],
 		"features":{
-					"choselvl1":{
-						"Archery":{
-							"desc":"You gain a +2 bonus to attack rolls you make with ranged weapons.",
-							"level":1
-						},
-						"Defense":{
-							"desc":"While you are wearing armor, you gain a +1 bonus to AC.",
-							"level":1
-						},
-						"Dueling":{
-							"desc":"When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
-							"level":1
-						},
-						"Great Weapon Fighting":{
-							"desc":"When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.",
-							"level":1
-						},
-						"Protection":{
-							"desc":"When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.",
-							"level":1
-						},
-						"Two-Weapon Fighting":{
-							"desc":"When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
-							"level":1
-						},
-					},
-					"Second Wind":{
-						"desc":"You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
-						"level":1
-					},
-					"Action Surge":{
-						"desc":"Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action. Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
-						"level":2
-					},
-					"Martial Archetype":{
-						"desc":"At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. Choose Champion, Battle Master, or Eldritch Knight, all detailed at the end of the class description. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level.",
-						"level":3
-					},
-					"Ability Score Improvement":{
-						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
-						"level":4
-					},
-					"Extra Attack":{
-						"desc":"You can attack twice, instead of once, whenever you take the Attack action on your turn.",
-						"level":5
-					},
-					"Ability Score Improvement":{
-						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
-						"level":6
-					},
-					"Ability Score Improvement":{
-						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
-						"level":8
-					},
-					"Indomitable":{
-						"desc":"You can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can’t use this feature again until you finish a long rest.",
-						"level":9
-					},
-					"Extra Attack":{
-						"desc":"You can attack thrice, instead of twice, whenever you take the Attack action on your turn.",
-						"level":11
-					},
-					"Ability Score Improvement":{
-						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
-						"level":12
-					},
-					"Indomitable":{
-						"desc":"You can use the Indomitable feature twice between long rests.",
-						"level":13
-					},
-					"Ability Score Improvement":{
-						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
-						"level":14
-					},
-					"Ability Score Improvement":{
-						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
-						"level":16
-					},
-					"Indomitable 3":{
-						"desc":"You can use the Indomitable feature thrice between long rests.",
-						"level":17
-					},
-					"Action Surge 2":{
-						"desc":"You can use the Action Surge feature twice before a rest, but only once on the same turn.",
-						"level":17
-					},
-					"Ability Score Improvement":{
-						"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
-						"level":19
-					},
-					"Extra Attack":{
-						"desc":"You can attack 4 times, instead of 3, whenever you take the Attack action on your turn.",
-						"level":20
-					},
+			"choselvl1":{
+				"Archery":{
+					"desc":"You gain a +2 bonus to attack rolls you make with ranged weapons.",
+					"level":1
 				},
-		"equipment":[],
+				"Defense":{
+					"desc":"While you are wearing armor, you gain a +1 bonus to AC.",
+					"level":1
+				},
+				"Dueling":{
+					"desc":"When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+					"level":1
+				},
+				"Great Weapon Fighting":{
+					"desc":"When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.",
+					"level":1
+				},
+				"Protection":{
+					"desc":"When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.",
+					"level":1
+				},
+				"Two-Weapon Fighting":{
+					"desc":"When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
+					"level":1
+				},
+			},
+			"Second Wind":{
+				"desc":"You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+				"level":1
+			},
+			"Action Surge":{
+				"desc":"Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action. Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
+				"level":2
+			},
+			"Martial Archetype":{
+				"desc":"At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. Choose Champion, Battle Master, or Eldritch Knight, all detailed at the end of the class description. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level.",
+				"level":3
+			},
+			"Ability Score Improvement":{
+				"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+				"level":4
+			},
+			"Extra Attack":{
+				"desc":"You can attack twice, instead of once, whenever you take the Attack action on your turn.",
+				"level":5
+			},
+			"Ability Score Improvement":{
+				"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+				"level":6
+			},
+			"Ability Score Improvement":{
+				"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+				"level":8
+			},
+			"Indomitable":{
+				"desc":"You can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can’t use this feature again until you finish a long rest.",
+				"level":9
+			},
+			"Extra Attack":{
+				"desc":"You can attack thrice, instead of twice, whenever you take the Attack action on your turn.",
+				"level":11
+			},
+			"Ability Score Improvement":{
+				"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+				"level":12
+			},
+			"Indomitable":{
+				"desc":"You can use the Indomitable feature twice between long rests.",
+				"level":13
+			},
+			"Ability Score Improvement":{
+				"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+				"level":14
+			},
+			"Ability Score Improvement":{
+				"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+				"level":16
+			},
+			"Indomitable 3":{
+				"desc":"You can use the Indomitable feature thrice between long rests.",
+				"level":17
+			},
+			"Action Surge 2":{
+				"desc":"You can use the Action Surge feature twice before a rest, but only once on the same turn.",
+				"level":17
+			},
+			"Ability Score Improvement":{
+				"desc":"You can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can’t increase an ability score above 20 using this feature. Using the optional feats rule, you can forgo taking this feature to take a feat of your choice instead.",
+				"level":19
+			},
+			"Extra Attack":{
+				"desc":"You can attack 4 times, instead of 3, whenever you take the Attack action on your turn.",
+				"level":20
+			},
 		},
+		"equipment":{
+			"free":["Any Martial Weapon"],
+			"opt1":{
+				"a":["Chain Mail"],
+				"b":["Leather Armor", "Longbow", "Arrow x20"]
+			},
+			"opt2":{
+				"a":["Shield"],
+				"b":["Any Martial Weapon"]
+			},
+			"opt3":{
+				"a":["Crossbow, light","Bolt x20"],
+				"b":["Handaxe x2"]
+			}
+		}
 
 
 	}
+}
 
 
 const classSpellList = require('../Dnd_classes/classSpellList.json');
@@ -696,12 +743,25 @@ function chose1stFeature(chosenClass) {
 			break;
 
 		default:
-			chose1stFeatureReply = "ERROR: chosenClass was believed to have 1st level feature otpions but does not";
+			chose1stFeatureReply = "ERROR: chosenClass was believed to have 1st level feature options but does not";
 			break;
 
 	}
 
 }
 
+
+function allMartialWeapons() {
+	let list = [];
+
+	for (let weap of martialMeleeWeapons) 
+		list.push(weap.Name) 
+
+	for (let weap of martialRangedWeapons)
+		list.push(weap.Name)
+
+	console.log(list)
+	return list
+}
 
 //---Helper Functions---//
