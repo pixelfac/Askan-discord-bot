@@ -85,21 +85,26 @@ module.exports = {
 						if (content == index) {
 							chosenClass = classes[cls];
 							//set target class to lvl 1
-							charSheet.class[cls] = 1;
-							charSheet.hitDice = classes[cls].hitDice;
-							charSheet.hp = classes[cls].hp;
-							charSheet.hpMax = classes[cls].hp;
-							charSheet.hpPerLevel = classes[cls].hpPerLevel;
+							charSheet.class[chosenClass.name] = 1;
+							charSheet.hitDice = chosenClass.hitDice;
+							charSheet.hp = chosenClass.hp;
+							charSheet.hpMax = chosenClass.hp;
+							charSheet.hpPerLevel = chosenClass.hpPerLevel;
 							//set saving throw proficiency
-							for (let i = 0; i < classes[cls].savingThrows.length; i++) {
-								if (charSheet.savingThrows[i] || classes[cls].savingThrows[i])
+							for (let i = 0; i < chosenClass.savingThrows.length; i++) {
+								if (charSheet.savingThrows[i] || chosenClass.savingThrows[i])
 									charSheet.savingThrows[i] = 1;
 								else charSheet.savingThrows[i] = 0;
 							}
 							//set other proficiencies
-							charSheet.armorProf.push(...classes[cls].armorProf);
-							charSheet.toolProf.push(...classes[cls].toolProf)
-							charSheet.weaponProf.push(...classes[cls].weaponProf)
+							charSheet.armorProf.push(...chosenClass.armorProf)
+							charSheet.toolProf.push(...chosenClass.toolProf)
+							charSheet.weaponProf.push(...chosenClass.weaponProf)
+
+							for (let ftr in chosenClass.features) {
+								if (chosenClass.features[ftr].level == 1)
+									charSheet.features[ftr] = chosenClass.features[ftr]
+							}
 							break;
 						}
 						index++;
@@ -207,7 +212,10 @@ module.exports = {
 				}
 
 				//if chosenClass needs to select a 1st level Feature
-				if (chose1stFeature(chosenClass)) {
+				if ("choselvl1" in chosenClass.features) {
+					//stores correct message in chose1stFeatureReply
+					chose1stFeature(chosenClass)
+					//prints message to user
 					message.reply(chose1stFeatureReply)
 				}
 				else {
@@ -219,11 +227,22 @@ module.exports = {
 
 			case 7: //processes feature
 				if (!isReverse) {
-					
+						
+					index = 1;
+					for (let feat in chosenClass.features.choselvl1) {
+						if (content == index) {
+							//adds chosen feature to list of charSheet Features
+							charSheet.features[feat] = chosenClass.features.choselvl1[feat];
+							message.channel.send(`\`${feat}\` has been added to your character sheet`)
+						}
+						index++;
+					}
+
 				}
 
 				message.reply("Please enter your race")
 				currentStep += 1
+				console.log(charSheet)
 				break;
 
 			case 8:
@@ -660,7 +679,7 @@ function chose1stFeature(chosenClass) {
 
 			index = 1;
 			for (let style in chosenClass.features.choselvl1) {
-				chose1stFeatureReply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n`
+				chose1stFeatureReply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n\n`
 				index++;
 			}
 			chose1stFeatureReply += "```";
