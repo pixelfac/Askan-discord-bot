@@ -362,6 +362,8 @@ var reply = "";
 //---'Class' Variables---//
 
 
+//---Init Stuff---//
+
 const { token, prefix } = require('../config.json');
 const fs = require('fs') ;
 
@@ -379,12 +381,14 @@ const allSimpleWeapons = allSimpleWeapons();
 const allSimpleMeleeWeapons = allSimpleWeapons();
 const allSimpleRangedWeapons = allSimpleRangedWeapons();
 
-
 // Character Creation Enum
 const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
 						"ABILITY_SCORES", "HEIGHT","ALIGNMENT", "BACKGROUND", "BACKGROUND_lang",
 						"BACKGROUND_equipment", "BACKGROUND_tools", "BACKGROUND_traits","BACKGROUND_ideals",
 						"BACKGROUND_bonds", "BACKGROUND_flaws" ]
+
+//---Init Stuff---//
+
 
 
 //---Formating Info---//
