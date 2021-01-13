@@ -3,8 +3,6 @@ module.exports = {
 	description: "Walks you through the process of creating a Dnd character from scratch",
 	execute(prefix, message, args) {
 		module.exports.config.author = message.author;
-		//instance variable
-		var reply = "";
 
 		//if user uses 'reverse' command, move back one step
 		if (message.content.startsWith(`${prefix}reverse`) || message.content.startsWith(`${prefix}r`) || message.content.startsWith(`${prefix}REVERSE`)) {
@@ -383,6 +381,9 @@ var chose1stFeatureReply = "";
 
 //general purpose index for generating numbered lists
 var index = 1;
+
+//string filled with messages/responses sent to user
+var reply = "";
 
 
 //---'Class' Variables---//
