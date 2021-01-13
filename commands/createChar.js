@@ -702,6 +702,27 @@ function chose1stFeature(chosenClass) {
 
 }
 
+//used to check if str is int [0,9]
+function isNatNum(str) {
+	switch (str) {
+		case "0":
+		case "1":
+		case "2":
+		case "3":
+		case "4":
+		case "5":
+		case "6":
+		case "7":
+		case "8":
+		case "9":
+			return true;
+			break;
+		default:
+			return false;
+
+	}
+}
+
 
 function allMartialWeapons() {
 	let list = [];
@@ -741,6 +762,13 @@ function processSex(message) {
 //processes class input
 //see case 3
 function processClass(message) {
+
+	//error catch; if input is valid natural number 
+	if (!isNatNum(message.content)) {
+		message.channel.send(`Your input was not valid. I was expecting an integer and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
 	//iterate through all currently implemented classes and if content matches the class name, assign those class values to the charSheet
 	index = 1;
 	for (let cls in classes) {
