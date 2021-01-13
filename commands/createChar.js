@@ -365,9 +365,20 @@ var reply = "";
 const { token, prefix } = require('../config.json');
 const fs = require('fs') ;
 
-//import weapon arrays
+//import weapon json arrays
 const martialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons.json');
 const martialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons.json');
+const simpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons.json');
+const simpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons.json');
+
+//assigns all arrays of weapon classes
+const allMartialWeapons = allMartialWeapons();
+const allMartialMeleeWeapons = allMartialMeleeWeapons();
+const allMartialRangedWeapons = allMartialRangedWeapons();
+const allSimpleWeapons = allSimpleWeapons();
+const allSimpleMeleeWeapons = allSimpleWeapons();
+const allSimpleRangedWeapons = allSimpleRangedWeapons();
+
 
 // Character Creation Enum
 const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
@@ -697,17 +708,70 @@ function isNatNum(str) {
 	}
 }
 
-
+//array of all martial weapons
 function allMartialWeapons() {
-	let list = [];
+	let arr = [];
 
 	for (let weap of martialMeleeWeapons) 
-		list.push(weap.Name) 
+		arr.push(weap.Name) 
 
 	for (let weap of martialRangedWeapons)
-		list.push(weap.Name)
+		arr.push(weap.Name)
 
-	return list
+	return arr
+}
+
+//array of all martial melee weapons
+function allMartialMeleeWeapons() {
+	let arr = [];
+
+	for (let weap of martialMeleeWeapons) 
+		arr.push(weap.Name) 
+
+	return arr
+}
+
+//array of all martial ranged weapons
+function allMartialRangedWeapons() {
+	let arr = [];
+
+	for (let weap of martialRangedWeapons)
+		arr.push(weap.Name)
+
+	return arr
+}
+
+//array of all simple weapons
+function allSimpleWeapons() {
+	let arr = [];
+
+	for (let weap of simpleMeleeWeapons) 
+		arr.push(weap.Name) 
+
+	for (let weap of simpleRangedWeapons)
+		arr.push(weap.Name)
+
+	return arr;
+}
+
+//array of all simple melee weapons
+function allSimpleMeleeWeapons() {
+	let arr = [];
+
+	for (let weap of simpleMeleeWeapons) 
+		arr.push(weap.Name) 
+
+	return arr;
+}
+
+//array of all simple ranged weapons
+function allSimpleRangedWeapons() {
+	let arr = [];
+
+	for (let weap of simpleRangedWeapons)
+		arr.push(weap.Name)
+
+	return arr;
 }
 
 //processes name input
