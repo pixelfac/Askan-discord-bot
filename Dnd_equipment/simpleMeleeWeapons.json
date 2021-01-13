@@ -28,8 +28,8 @@
         "Damagetype": "Slashing",
         "Weight": "2 lb",
         "Homebrew": "False",
-        "Properties": [ 
-            "Light", 
+        "Properties": [
+             "Light", 
             "Thrown (20/60)" 
         ]
     },
@@ -98,5 +98,5 @@
             "Thrown (20/60)",
             "Versatile (1d8)"
         ]
-    },
+    }
 ]

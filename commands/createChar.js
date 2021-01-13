@@ -132,10 +132,10 @@ module.exports = {
 				else {
 					//if chosenClass needs to select a 1st level Feature
 					if ("choselvl1" in chosenClass.features) {
-						//stores correct message in chose1stFeatureReply
+						//stores correct message in reply
 						chose1stFeature(chosenClass)
 						//prints message to user
-						message.reply(chose1stFeatureReply)
+						message.reply(reply)
 					}
 					else {
 						message.reply("Please enter your race")
@@ -154,10 +154,10 @@ module.exports = {
 
 				//if chosenClass needs to select a 1st level Feature
 				if ("choselvl1" in chosenClass.features) {
-					//stores correct message in chose1stFeatureReply
+					//stores correct message in reply
 					chose1stFeature(chosenClass)
 					//prints message to user
-					message.reply(chose1stFeatureReply)
+					message.reply(reply)
 				}
 				else {
 					message.reply("Please enter your race")
@@ -350,7 +350,7 @@ var charSheet = { }
 var chosenClass = { }
 
 //stores reply from chose1stFeature
-var chose1stFeatureReply = "";
+var reply = "";
 
 //general purpose index for generating numbered lists
 var index = 1;
@@ -374,12 +374,12 @@ const simpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons.json');
 const simpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons.json');
 
 //assigns all arrays of weapon classes
-const allMartialWeapons = allMartialWeapons();
-const allMartialMeleeWeapons = allMartialMeleeWeapons();
-const allMartialRangedWeapons = allMartialRangedWeapons();
-const allSimpleWeapons = allSimpleWeapons();
-const allSimpleMeleeWeapons = allSimpleWeapons();
-const allSimpleRangedWeapons = allSimpleRangedWeapons();
+const allMartialWeapons = listMartialWeapons();
+const allMartialMeleeWeapons = listMartialMeleeWeapons();
+const allMartialRangedWeapons = listMartialRangedWeapons();
+const allSimpleWeapons = listSimpleWeapons();
+const allSimpleMeleeWeapons = listSimpleWeapons();
+const allSimpleRangedWeapons = listSimpleRangedWeapons();
 
 // Character Creation Enum
 const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
@@ -666,25 +666,25 @@ const classSpellList = require('../Dnd_classes/classSpellList.json');
 
 //---Helper Functions---//
 
-//writes to chose1stFeatureReply the options that a class has as their first feature 
+//writes to reply the options that a class has as their first feature 
 function chose1stFeature(chosenClass) {
 
 	switch (chosenClass.name) {
 
 		case "Fighter":
-			chose1stFeatureReply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n```";
+			reply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n```";
 
 			index = 1;
 			for (let style in chosenClass.features.choselvl1) {
-				chose1stFeatureReply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n\n`
+				reply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n\n`
 				index++;
 			}
-			chose1stFeatureReply += "```";
+			reply += "```";
 			return true;
 			break;
 
 		default:
-			chose1stFeatureReply = "ERROR: chosenClass was believed to have 1st level feature options but does not";
+			reply = "ERROR: chosenClass was believed to have 1st level feature options but does not";
 			break;
 
 	}
@@ -713,7 +713,7 @@ function isNatNum(str) {
 }
 
 //array of all martial weapons
-function allMartialWeapons() {
+function listMartialWeapons() {
 	let arr = [];
 
 	for (let weap of martialMeleeWeapons) 
@@ -726,7 +726,7 @@ function allMartialWeapons() {
 }
 
 //array of all martial melee weapons
-function allMartialMeleeWeapons() {
+function listMartialMeleeWeapons() {
 	let arr = [];
 
 	for (let weap of martialMeleeWeapons) 
@@ -736,7 +736,7 @@ function allMartialMeleeWeapons() {
 }
 
 //array of all martial ranged weapons
-function allMartialRangedWeapons() {
+function listMartialRangedWeapons() {
 	let arr = [];
 
 	for (let weap of martialRangedWeapons)
@@ -746,7 +746,7 @@ function allMartialRangedWeapons() {
 }
 
 //array of all simple weapons
-function allSimpleWeapons() {
+function listSimpleWeapons() {
 	let arr = [];
 
 	for (let weap of simpleMeleeWeapons) 
@@ -759,7 +759,7 @@ function allSimpleWeapons() {
 }
 
 //array of all simple melee weapons
-function allSimpleMeleeWeapons() {
+function listSimpleMeleeWeapons() {
 	let arr = [];
 
 	for (let weap of simpleMeleeWeapons) 
@@ -769,7 +769,7 @@ function allSimpleMeleeWeapons() {
 }
 
 //array of all simple ranged weapons
-function allSimpleRangedWeapons() {
+function listSimpleRangedWeapons() {
 	let arr = [];
 
 	for (let weap of simpleRangedWeapons)
