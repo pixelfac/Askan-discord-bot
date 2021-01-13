@@ -93,37 +93,10 @@ module.exports = {
 
 			case 4: //processes class skills
 				if (!isReverse) {
-
-					//if too many args
-					if (args.length > 2) {
-						message.channel.send("You have provided too many arguments. I am looking for only 2 numbers. E.G. `1 3`")
-						return;
-					}
-
-					if (args[0] == args[1]) {
-						message.channel.send("The arguments you have provided are the same. I am looking for 2 different numbers. E.G. `1 3`")
-						return;
-					}
-
-					//select skills from input and add to charSheet
-					index = 1;
-					for (skill of chosenClass.skillProf) {
-						if (index == args[0] || index == args[1])
-							charSheet.skillProf.push(chosenClass.skillProf[index-1])
-						index++;
-					}
-
-					//if user input didn't match expected range
-					if (charSheet.skillProf.length < 2) {
-						message.channel.send(`Your input was not valid. I was expecting 2 integers between 1 and ${index-1} and I received '${args[0]} and ${args[1]}'. Please try again.`);
-						return;
-					}
-					
-					message.channel.send(`The skills \`${charSheet.skillProf[0]}\` and \`${charSheet.skillProf[1]}\` have been added to your list of proficiencies.`)
+					reply = processClassSkills(message, args)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
-
-
-
 
 
 				reply = `Pick equipment from the following list.\n\`\`\`neat`;
@@ -809,6 +782,46 @@ function processClass(message) {
 
 	return `Your starting class is \`${chosenClass.name}\`.`;
 
+}
+
+function processClassSkills(message, args) {
+	//if too many args
+	if (args.length > 2) {
+		message.channel.send("You have provided too many arguments. I am looking for only 2 numbers. E.G. `1 3`")
+		return null;
+	}
+
+	if (args[0] == args[1]) {
+		message.channel.send("The arguments you have provided are the same. I am looking for 2 different numbers. E.G. `1 3`")
+		return null;
+	}
+
+	if (!isNatNum(args[0])) {
+		message.channel.send(`Your input was not valid. I was expecting an integer and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
+	if (!isNatNum(args[1])) {
+		message.channel.send(`Your input was not valid. I was expecting an integer and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
+	//select skills from input and add to charSheet
+	index = 1;
+	for (skill of chosenClass.skillProf) {
+		if (index == args[0] || index == args[1])
+			charSheet.skillProf.push(chosenClass.skillProf[index-1])
+		index++;
+	}
+
+	//if user input didn't match expected range
+	if (charSheet.skillProf.length < 2) {
+		message.channel.send(`Your input was not valid. I was expecting 2 integers between 1 and ${index-1} and I received '${args[0]} and ${args[1]}'. Please try again.`);
+		return null;
+	}
+
+	return `The skills \`${charSheet.skillProf[0]}\` and \`${charSheet.skillProf[1]}\` have been added to your list of proficiencies.`;
+					
 }
 
 //---Helper Functions---//
