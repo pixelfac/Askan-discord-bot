@@ -1,7 +1,7 @@
 module.exports = {
 	name: "createChar",
 	description: "Walks you through the process of creating a Dnd character from scratch",
-	execute(prefix, message, content, args) {
+	execute(prefix, message, args) {
 		module.exports.config.author = message.author;
 		//instance variable
 		var reply = "";
@@ -39,12 +39,9 @@ module.exports = {
 
 			case 1: //processes name
 				if (!isReverse) {
-					//add in functionality to randomize the character name based off of the race given the '-random' tag in the name var
-
-					//removes nonfilename chars from name
-					let name = content.replace(/[<>:"/\\|?*]/g, "_");
-					charSheet.name = name
-					message.channel.send(`Your character's name is \`${name}\`.`)
+					reply = processName(message)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 				message.reply("Please enter your sex: Type '1' for Male, '2' for Female\n```[1] Male\n[2]Female```")
 				currentStep += 1
@@ -52,14 +49,9 @@ module.exports = {
 
 			case 2: //processes sex
 				if (!isReverse) {
-					if (content == 1) charSheet.sex = 1;
-					else if (content == 2) charSheet.sex = 0;
-					else {
-						message.channel.send(`Your input was not valid. I was expecting '1' or '2' and I received '${content}'. Please try again.`);
-						return;
-					}
-
-					message.channel.send(`Your character's sex is \`${(charSheet.sex == 1) ? 'Male' : 'Female'}\`.`)
+					reply = processSex(message)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 
 				//create and print a string of the class options
@@ -82,7 +74,7 @@ module.exports = {
 					//iterate through all currently implemented classes and if content matches the class name, assign those class values to the charSheet
 					index = 1;
 					for (let cls in classes) {
-						if (content == index) {
+						if (message.content == index) {
 							chosenClass = classes[cls];
 							//set target class to lvl 1
 							charSheet.class[chosenClass.name] = 1;
@@ -114,7 +106,7 @@ module.exports = {
 
 					//out of bounds response catch
 					if (charSheet.hp === 0) {
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${content}'. Please try again.`);
+						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${message.content}'. Please try again.`);
 						return;
 					}
 
@@ -178,7 +170,7 @@ module.exports = {
 				reply = `Pick equipment from the following list.\n\`\`\`neat`;
 
 				for (let arr in chosenClass.equipment) {
-					//prints all martial weapons if possible
+					//prints array of all martial weapons if possible
 					if (Array.isArray(chosenClass.equipment[arr]) && chosenClass.equipment[arr].includes("Any Martial Weapon"))
 						console.log(allMartialWeapons())
 					else console.log(chosenClass.equipment[arr])
@@ -249,7 +241,7 @@ module.exports = {
 					//switch used to detect if user inputed valid option
 					let noMatch = true;
 					for (let feat in chosenClass.features.choselvl1) {
-						if (content == index) {
+						if (message.content == index) {
 							//adds chosen feature to list of charSheet Features
 							charSheet.features[feat] = chosenClass.features.choselvl1[feat];
 							message.channel.send(`\`${feat}\` has been added to your character sheet`)
@@ -261,7 +253,7 @@ module.exports = {
 
 					//out of bounds response catch
 					if (noMatch) {
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${content}'. Please try again.`);
+						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${message.content}'. Please try again.`);
 						return;
 					}
 
@@ -432,7 +424,6 @@ var chose1stFeatureReply = "";
 var index = 1;
 
 
-
 //---'Class' Variables---//
 
 
@@ -473,8 +464,6 @@ also has 'opt' properties which store the options the player has to chose betwee
 */
 //---Formatting Info---//
 
-
-
 //template character sheet JSON used to reset the charSheet after a character is created
 //is instantiated at first step
 var templateCharSheet = {
@@ -483,18 +472,19 @@ var templateCharSheet = {
 			"race":{},
 			"subrace":{},
 			"level":1,
-			"class": {  "Barbarian":0,
-						"Bard":0,
-						"Cleric":0,
-						"Druid":0,
-						"Fighter":0,
-						"Monk":0,
-						"Paladin":0,
-						"Ranger":0,
-						"Sorcerer":0,
-						"Warlock":0,
-						"Wizard":0,
-					},
+			"class": {  
+				"Barbarian":0,
+				"Bard":0,
+				"Cleric":0,
+				"Druid":0,
+				"Fighter":0,
+				"Monk":0,
+				"Paladin":0,
+				"Ranger":0,
+				"Sorcerer":0,
+				"Warlock":0,
+				"Wizard":0,
+			},
 			"features":[],
 			"armorProf":[],
 			"toolProf":[],
@@ -545,8 +535,6 @@ const templateRace = {
 const dwarf = require("../Dnd_races/dwarf.json");
 const elf = require("../Dnd_races/elf.json");
 
-//update for each race added above
-const raceDesc = `[1] ${dwarf.name}\n[2] ${elf.name}`
 //---Race Info---//
 
 
@@ -700,16 +688,18 @@ const classes = {
 			},
 		},
 		"equipment":{
-			"free":["Any Martial Weapon"],
 			"opt1":{
+				"a":["Any Martial Weapon"]
+			},
+			"opt2":{
 				"a":["Chain Mail"],
 				"b":["Leather Armor", "Longbow", "Arrow x20"]
 			},
-			"opt2":{
+			"opt3":{
 				"a":["Shield"],
 				"b":["Any Martial Weapon"]
 			},
-			"opt3":{
+			"opt4":{
 				"a":["Crossbow, light","Bolt x20"],
 				"b":["Handaxe x2"]
 			}
@@ -762,6 +752,29 @@ function allMartialWeapons() {
 		list.push(weap.Name)
 
 	return list
+}
+
+//processes name input
+//see case 1
+function processName(message) {
+	//removes nonfilename chars from name
+	let name = message.content.replace(/[<>:"/\\|?*]/g, "_");
+	charSheet.name = name
+	return `Your character's name is \`${name}\`.`;
+}
+
+//processes sex input
+//see case 2
+function processSex(message) {
+	if (message.content == 1) charSheet.sex = 1;		//Male
+	else if (message.content == 2) charSheet.sex = 0;	//Female
+	else {
+		//error message
+		message.channel.send(`Your input was not valid. I was expecting '1' or '2' and I received '${message.content}'. Please try again.`);
+		//cue to abort process
+		return null;
+	}
+	return `Your characters sex is \`${(charSheet.sex === 1) ? 'Male':'Female'}\`.`
 }
 
 //---Helper Functions---//
