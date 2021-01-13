@@ -43,6 +43,8 @@ module.exports = {
 					if (reply === null) return;
 					message.channel.send(reply)
 				}
+
+
 				message.reply("Please enter your sex: Type '1' for Male, '2' for Female\n```[1] Male\n[2]Female```")
 				currentStep += 1
 				break;
@@ -70,52 +72,11 @@ module.exports = {
 
 			case 3: //processes class
 				if (!isReverse) {
-
-					//iterate through all currently implemented classes and if content matches the class name, assign those class values to the charSheet
-					index = 1;
-					for (let cls in classes) {
-						if (message.content == index) {
-							chosenClass = classes[cls];
-							//set target class to lvl 1
-							charSheet.class[chosenClass.name] = 1;
-							charSheet.hitDice = chosenClass.hitDice;
-							charSheet.hp = chosenClass.hp;
-							charSheet.hpMax = chosenClass.hp;
-							charSheet.hpPerLevel = chosenClass.hpPerLevel;
-							//set saving throw proficiency
-							for (let i = 0; i < chosenClass.savingThrows.length; i++) {
-								if (charSheet.savingThrows[i] || chosenClass.savingThrows[i])
-									charSheet.savingThrows[i] = 1;
-								else charSheet.savingThrows[i] = 0;
-							}
-							//set other proficiencies
-							charSheet.armorProf.push(...chosenClass.armorProf)
-							charSheet.toolProf.push(...chosenClass.toolProf)
-							charSheet.weaponProf.push(...chosenClass.weaponProf)
-
-							for (let ftr in chosenClass.features) {
-								if (chosenClass.features[ftr].level == 1)
-									charSheet.features[ftr] = chosenClass.features[ftr]
-							}
-							break;
-						}
-						index++;
-
-
-					}
-
-					//out of bounds response catch
-					if (charSheet.hp === 0) {
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${message.content}'. Please try again.`);
-						return;
-					}
-
-					message.channel.send(`Your starting class is \`${chosenClass.name}\`.`)
-
+					reply = processClass(message)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 				
-
-
 
 				reply = `Pick 2 skills from the following list. Input your choices with a space in between, i.e. \`1 3\` to pick the first and third skills\n\`\`\``
 				//prints formatted list of all skills for each class
@@ -775,6 +736,50 @@ function processSex(message) {
 		return null;
 	}
 	return `Your characters sex is \`${(charSheet.sex === 1) ? 'Male':'Female'}\`.`
+}
+
+//processes class input
+//see case 3
+function processClass(message) {
+	//iterate through all currently implemented classes and if content matches the class name, assign those class values to the charSheet
+	index = 1;
+	for (let cls in classes) {
+		if (message.content == index) {
+			chosenClass = classes[cls];
+			//set target class to lvl 1
+			charSheet.class[chosenClass.name] = 1;
+			charSheet.hitDice = chosenClass.hitDice;
+			charSheet.hp = chosenClass.hp;
+			charSheet.hpMax = chosenClass.hp;
+			charSheet.hpPerLevel = chosenClass.hpPerLevel;
+			//set saving throw proficiency
+			for (let i = 0; i < chosenClass.savingThrows.length; i++) {
+				if (charSheet.savingThrows[i] || chosenClass.savingThrows[i])
+					charSheet.savingThrows[i] = 1;
+				else charSheet.savingThrows[i] = 0;
+			}
+			//set other proficiencies
+			charSheet.armorProf.push(...chosenClass.armorProf)
+			charSheet.toolProf.push(...chosenClass.toolProf)
+			charSheet.weaponProf.push(...chosenClass.weaponProf)
+
+			for (let ftr in chosenClass.features) {
+				if (chosenClass.features[ftr].level == 1)
+					charSheet.features[ftr] = chosenClass.features[ftr]
+			}
+		}
+		break;
+		index++;
+	}
+
+	//out of bounds response catch
+	if (charSheet.hp === 0) {
+		message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index} and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
+	return `Your starting class is \`${chosenClass.name}\`.`;
+
 }
 
 //---Helper Functions---//
