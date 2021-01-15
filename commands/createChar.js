@@ -18,6 +18,7 @@ module.exports = {
 			currentStep = 0;
 			charSheet = JSON.parse(JSON.stringify(templateCharSheet));
 			dndmode = false;
+			console.log('Used Exit commant: exited dndmode')
 			return;
 		}
 
