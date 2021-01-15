@@ -174,26 +174,9 @@ module.exports = {
 			case 7: //processes features
 				if (!isReverse) {
 					console.log(createCharSteps[currentStep-1] + ":", message.content)
-					index = 1;
-					//switch used to detect if user inputed valid option
-					let noMatch = true;
-					for (let feat in chosenClass.features.choselvl1) {
-						if (message.content == index) {
-							//adds chosen feature to list of charSheet Features
-							charSheet.features[feat] = chosenClass.features.choselvl1[feat];
-							message.channel.send(`\`${feat}\` has been added to your character sheet`)
-							noMatch = false;
-							break;
-						}
-						index++;
-					}
-
-					//out of bounds response catch
-					if (noMatch) {
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${message.content}'. Please try again.`);
-						return;
-					}
-
+					reply = processClassFeatures(message)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 
 				message.reply("Please enter your race")
@@ -828,6 +811,23 @@ function processClassSkills(message, args) {
 
 	return `The skills \`${charSheet.skillProf[0]}\` and \`${charSheet.skillProf[1]}\` have been added to your list of proficiencies.`;
 					
+}
+
+function processClassFeatures(message) {
+	index = 1;
+	//switch used to detect if user inputed valid option
+	for (let feat in chosenClass.features.choselvl1) {
+		if (message.content == index) {
+			//adds chosen feature to list of charSheet Features
+			charSheet.features[feat] = chosenClass.features.choselvl1[feat];
+			return `\`${feat}\` has been added to your character sheet`
+		}
+		index++;
+	}
+
+	//out of bounds response catch
+	message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${message.content}'. Please try again.`);
+	return null;
 }
 
 //---Helper Functions---//
