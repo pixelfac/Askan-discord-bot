@@ -21,3 +21,4 @@ const allMartialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons_Wit
 const allMartialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons_WithCodes.json');
 const allSimpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons_WithCodes.json');
 const allSimpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons_WithCodes.json'); 
+
