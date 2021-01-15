@@ -10,6 +10,7 @@ module.exports = {
 			if (currentStep < 0)
 				currentStep = 0;
 			isReverse = true;
+			console.log("Used Reverse command: went back a step.")
 		}
 
 		//if user uses 'exit' command, reset current step to reset the createChar process
@@ -37,6 +38,7 @@ module.exports = {
 
 			case 1: //processes name
 				if (!isReverse) {
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 					reply = processName(message)
 					if (reply === null) return;
 					message.channel.send(reply)
@@ -49,9 +51,10 @@ module.exports = {
 
 			case 2: //processes sex
 				if (!isReverse) {
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 					reply = processSex(message)
 					if (reply === null) return;
-					message.channel.send(reply)
+					message.channel.send(reply) 
 				}
 
 				//create and print a string of the class options
@@ -70,6 +73,7 @@ module.exports = {
 
 			case 3: //processes class
 				if (!isReverse) {
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 					reply = processClass(message)
 					if (reply === null) return;
 					message.channel.send(reply)
@@ -93,6 +97,7 @@ module.exports = {
 
 			case 4: //processes class skills
 				if (!isReverse) {
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 					reply = processClassSkills(message, args)
 					if (reply === null) return;
 					message.channel.send(reply)
@@ -104,7 +109,7 @@ module.exports = {
 				for (let arr in chosenClass.equipment) {
 					//prints array of all martial weapons if possible
 					if (Array.isArray(chosenClass.equipment[arr]) && chosenClass.equipment[arr].includes("Any Martial Weapon"))
-						console.log(allMartialWeapons())
+						console.log(allMartialWeapons)
 					else console.log(chosenClass.equipment[arr])
 				}
 
@@ -118,7 +123,7 @@ module.exports = {
 
 			case 5: //processes class equipment
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 
@@ -149,7 +154,7 @@ module.exports = {
 
 			case 6: //processes spells
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				//if chosenClass needs to select a 1st level Feature
@@ -168,7 +173,7 @@ module.exports = {
 
 			case 7: //processes features
 				if (!isReverse) {
-						
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 					index = 1;
 					//switch used to detect if user inputed valid option
 					let noMatch = true;
@@ -197,7 +202,7 @@ module.exports = {
 
 			case 8:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your race ability scores")
@@ -206,7 +211,7 @@ module.exports = {
 
 			case 9:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your ability scores")
@@ -215,7 +220,7 @@ module.exports = {
 
 			case 10:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your height")
@@ -224,7 +229,7 @@ module.exports = {
 
 			case 11:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your alignment")
@@ -233,7 +238,7 @@ module.exports = {
 
 			case 12:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background")
@@ -242,7 +247,7 @@ module.exports = {
 
 			case 13:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background languages")
@@ -251,7 +256,7 @@ module.exports = {
 
 			case 14:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background equipment")
@@ -260,7 +265,7 @@ module.exports = {
 
 			case 15:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background tools")
@@ -269,7 +274,7 @@ module.exports = {
 
 			case 16:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background traits")
@@ -278,7 +283,7 @@ module.exports = {
 
 			case 17:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background ideals")
@@ -287,7 +292,7 @@ module.exports = {
 
 			case 18:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background bonds")
@@ -295,8 +300,8 @@ module.exports = {
 				break;
 
 			case 19:	
-					if (!isReverse) {
-					
+				if (!isReverse) {
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background flaws")
@@ -374,12 +379,10 @@ const simpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons.json');
 const simpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons.json');
 
 //assigns all arrays of weapon classes
-const allMartialWeapons = listMartialWeapons();
-const allMartialMeleeWeapons = listMartialMeleeWeapons();
-const allMartialRangedWeapons = listMartialRangedWeapons();
-const allSimpleWeapons = listSimpleWeapons();
-const allSimpleMeleeWeapons = listSimpleWeapons();
-const allSimpleRangedWeapons = listSimpleRangedWeapons();
+const allMartialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons_WithCodes.json')
+const allMartialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons_WithCodes.json');
+const allSimpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons_WithCodes.json');
+const allSimpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons_WithCodes.json');
 
 // Character Creation Enum
 const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
@@ -712,71 +715,6 @@ function isNatNum(str) {
 	}
 }
 
-//array of all martial weapons
-function listMartialWeapons() {
-	let arr = [];
-
-	for (let weap of martialMeleeWeapons) 
-		arr.push(weap.Name) 
-
-	for (let weap of martialRangedWeapons)
-		arr.push(weap.Name)
-
-	return arr
-}
-
-//array of all martial melee weapons
-function listMartialMeleeWeapons() {
-	let arr = [];
-
-	for (let weap of martialMeleeWeapons) 
-		arr.push(weap.Name) 
-
-	return arr
-}
-
-//array of all martial ranged weapons
-function listMartialRangedWeapons() {
-	let arr = [];
-
-	for (let weap of martialRangedWeapons)
-		arr.push(weap.Name)
-
-	return arr
-}
-
-//array of all simple weapons
-function listSimpleWeapons() {
-	let arr = [];
-
-	for (let weap of simpleMeleeWeapons) 
-		arr.push(weap.Name) 
-
-	for (let weap of simpleRangedWeapons)
-		arr.push(weap.Name)
-
-	return arr;
-}
-
-//array of all simple melee weapons
-function listSimpleMeleeWeapons() {
-	let arr = [];
-
-	for (let weap of simpleMeleeWeapons) 
-		arr.push(weap.Name) 
-
-	return arr;
-}
-
-//array of all simple ranged weapons
-function listSimpleRangedWeapons() {
-	let arr = [];
-
-	for (let weap of simpleRangedWeapons)
-		arr.push(weap.Name)
-
-	return arr;
-}
 
 //processes name input
 //see case 1
