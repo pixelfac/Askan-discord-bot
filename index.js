@@ -43,6 +43,10 @@ client.on("message", function(message) {
   			client.commands.get("ping").execute(prefix, message, args);
     		break;
 
+      case "db":
+         client.commands.get("db").execute(prefix, message, args);
+         break;
+
     	//see gn.js
     	case "gn":
     		client.commands.get("gn").execute(prefix, message, args)
