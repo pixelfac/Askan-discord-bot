@@ -105,14 +105,10 @@ module.exports = {
 				}
 
 
-				reply = `Pick equipment from the following list.\n\`\`\`neat`;
+				reply = `Pick equipment from the following list.\n\`\`\``;
 
-				for (let arr in chosenClass.equipment) {
-					//prints array of all martial weapons if possible
-					if (Array.isArray(chosenClass.equipment[arr]) && chosenClass.equipment[arr].includes("Any Martial Weapon"))
-						console.log(allMartialWeapons)
-					else console.log(chosenClass.equipment[arr])
-				}
+			
+				reply += `${JSON.stringify(chosenClass.equipment)}`
 
 
 				reply += `\`\`\``
@@ -125,6 +121,9 @@ module.exports = {
 			case 5: //processes class equipment
 				if (!isReverse) {
 					console.log(createCharSteps[currentStep-1] + ":", message.content)
+					reply = processClassEqpt(message, args)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 
 
@@ -625,6 +624,7 @@ const classes = {
 			},
 		},
 		"equipment":{
+			"free":["Nothing", "nada", "zip"],
 			"opt1":{
 				"a":["Any Martial Weapon"]
 			},
@@ -697,6 +697,21 @@ function isNatNum(str) {
 			return false;
 
 	}
+}
+
+//returns int
+//used to parse equipment strings
+function getQuantityFromStr(str) {
+	console.log(parseInt(str.substring(str.lastIndexOf("x"))))
+	return parseInt(str.substring(str.lastIndexOf("x")))
+}
+
+
+function formatItemQuantity(str) {
+	let num = getQuantityFromStr(str)
+	let item = str.substring(0,str.lastIndexOf("x"))
+	item.trim();
+	return `${num} ${item}s`
 }
 
 
@@ -829,6 +844,10 @@ function processClassFeatures(message) {
 	//out of bounds response catch
 	message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${message.content}'. Please try again.`);
 	return null;
+}
+
+function processClassEqpt(message, args) {
+	
 }
 
 //---Helper Functions---//
