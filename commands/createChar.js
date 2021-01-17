@@ -626,7 +626,7 @@ const classes = {
 		"equipment":{
 			"free":["Nothing", "nada", "zip"],
 			"opt1":{
-				"a":["Any Martial Weapon"]
+				"a":["mw"]
 			},
 			"opt2":{
 				"a":["Chain Mail"],
@@ -634,7 +634,7 @@ const classes = {
 			},
 			"opt3":{
 				"a":["Shield"],
-				"b":["Any Martial Weapon"]
+				"b":["mw"]
 			},
 			"opt4":{
 				"a":["Crossbow, light","Bolt x20"],
@@ -698,6 +698,18 @@ function isNatNum(str) {
 
 	}
 }
+
+//returns true if weapon code is contained within options (mm,sr,mw,etc), false otherwise
+function isValidWeaponCode(code, options) {
+	//if both melee and ranged weapons are included in options
+	if (options === "mw") 
+		return isValidWeaponCode(code, "mm") || isValidWeaponCode(code, "mr");
+	if (options === "sw") 
+		return isValidWeaponCode(code, "sm") || isValidWeaponCode(code, "sr");
+
+	return (code.startsWith(options)) ? true : false;
+}
+
 
 //returns int
 //used to parse equipment strings
