@@ -624,7 +624,6 @@ const classes = {
 			},
 		},
 		"equipment":{
-			"free":["Nothing", "nada", "zip"],
 			"opt1":{
 				"a":["mw"]
 			},
@@ -714,14 +713,12 @@ function isValidWeaponCode(code, options) {
 //returns int
 //used to parse equipment strings
 function getQuantityFromStr(str) {
-	console.log(parseInt(str.substring(str.lastIndexOf("x")+1)))
 	return parseInt(str.substring(str.lastIndexOf("x")+1))
 }
 
 
 function formatItemQuantity(str) {
 	//if str isn't in quantity format
-	console.log(isNaN(parseInt(str.substring(str.lastIndexOf("x")+1))))
 	if (isNaN(parseInt(str.substring(str.lastIndexOf("x")+1))))
 		return str;
 
@@ -899,16 +896,16 @@ function processClassEqpt(message, args) {
 		return null;
 	}
 
-	index = 1;
+
+
+	index = 0;
 	for (let opt in chosenClass.equipment) {
 		//skip free if it exists
-		if (opt === 'free') {
-			index++;
+		if (opt === 'free')
 			continue;
-		}
 
+		console.log("opt", opt, "\nequipment", chosenClass.equipment[opt], "arg", args[index])
 		if (args[index] in chosenClass.equipment[opt]) {
-			console.log("opt",index, chosenClass.equipment[opt][args[index]])
 			itemsChosen.push(...chosenClass.equipment[opt][args[index]])
 		}
 		index++;
