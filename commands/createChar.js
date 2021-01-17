@@ -702,16 +702,53 @@ function isNatNum(str) {
 //returns int
 //used to parse equipment strings
 function getQuantityFromStr(str) {
-	console.log(parseInt(str.substring(str.lastIndexOf("x"))))
-	return parseInt(str.substring(str.lastIndexOf("x")))
+	console.log(parseInt(str.substring(str.lastIndexOf("x")+1)))
+	return parseInt(str.substring(str.lastIndexOf("x")+1))
 }
 
 
 function formatItemQuantity(str) {
+	//if str isn't in quantity format
+	console.log(isNaN(parseInt(str.substring(str.lastIndexOf("x")+1))))
+	if (isNaN(parseInt(str.substring(str.lastIndexOf("x")+1))))
+		return str;
+
 	let num = getQuantityFromStr(str)
-	let item = str.substring(0,str.lastIndexOf("x"))
-	item.trim();
+	let item = str.substring(0,str.lastIndexOf("x")).trim();
 	return `${num} ${item}s`
+}
+
+//takes a weapon code and returns the full name of that weapon
+function getWeaponFromCode(code) {
+	let weaponJSON;
+	switch (code.substr(0,2)) {
+
+		case "mm":
+			weaponJSON = allMartialMeleeWeapons;
+			break;
+
+		case "mr":
+			weaponJSON = allMartialRangedWeapons;
+			break;
+
+		case "sm":
+			weaponJSON = allSimpleMeleeWeapons;
+			break;
+
+		case "sr":
+			weaponJSON = allSimpleRangedWeapons;
+
+		default:
+			//error no match found
+			return null;
+	}
+
+	for (let name in weaponJSON) {
+		if (weaponJSON[name] === code)
+			return name;
+	}
+	//error no match found in database
+	return null;
 }
 
 
@@ -789,6 +826,8 @@ function processClass(message) {
 
 }
 
+//processes class input
+//see case 4
 function processClassSkills(message, args) {
 	//if too many args
 	if (args.length > 2) {
@@ -829,6 +868,54 @@ function processClassSkills(message, args) {
 					
 }
 
+//processes class equipment input
+//see case 5
+function processClassEqpt(message, args) {
+	let containsFree = 'free' in chosenClass.equipment;
+	let itemsChosen = []
+
+	//add free equipment to charSheet
+	if (containsFree)
+		itemsChosen.push(...chosenClass.equipment.free);
+
+	//count number of options
+	let numOpt = Object.keys(chosenClass.equipment).length + ((containsFree)?-1:0);
+
+	//insufficient parameters error catch
+	if (args.length < numOpt) {
+		message.channel.send(`Insufficient number of choices selected. We were looking for ${numOpt} choices. Please try again.`)
+		return null;
+	}
+
+	index = 1;
+	for (let opt in chosenClass.equipment) {
+		//skip free if it exists
+		if (opt === 'free') {
+			index++;
+			continue;
+		}
+
+		if (args[index] in chosenClass.equipment[opt]) {
+			console.log("opt",index, chosenClass.equipment[opt][args[index]])
+			itemsChosen.push(...chosenClass.equipment[opt][args[index]])
+		}
+		index++;
+	}
+
+	
+	charSheet.inventory.push(...itemsChosen)
+
+	let rtrn = "The equipment that you have chosen are as follows: ";
+	for (let item of itemsChosen) {
+		rtrn += `\`${formatItemQuantity(item)}\`, `
+	}
+	return rtrn.substr(0,rtrn.length-2)
+
+
+}
+
+//processes class features
+//see case 6
 function processClassFeatures(message) {
 	index = 1;
 	//switch used to detect if user inputed valid option
@@ -846,8 +933,5 @@ function processClassFeatures(message) {
 	return null;
 }
 
-function processClassEqpt(message, args) {
-	
-}
 
 //---Helper Functions---//
