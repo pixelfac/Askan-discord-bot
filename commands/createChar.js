@@ -897,7 +897,8 @@ function processClassEqpt(message, args) {
 	}
 
 
-
+	//iterate through arguments to see if there is a match
+	//if so, add to list of itemsChosen
 	index = 0;
 	for (let opt in chosenClass.equipment) {
 		//skip free if it exists
@@ -905,6 +906,19 @@ function processClassEqpt(message, args) {
 			continue;
 
 		console.log("opt", opt, "\nequipment", chosenClass.equipment[opt], "arg", args[index])
+		//check for 'mw', 'sr', etc
+		for (let arr in chosenClass.equipment[opt]) {
+			//if options allows selecting weapon using code
+			if (chosenClass.equipment[opt][arr][0] === 'mw' || chosenClass.equipment[opt][arr][0] === 'mm' || chosenClass.equipment[opt][arr][0] === 'mr' || chosenClass.equipment[opt][arr][0] === 'sw' || chosenClass.equipment[opt][arr][0] === 'sm' || chosenClass.equipment[opt][arr][0] === 'sr')
+				//if user input is valid code from given weapon lists
+				if (isValidWeaponCode(args[index],chosenClass.equipment[opt][arr][0])) {
+					//add chosen weapon to chosen items
+					itemsChosen.push(getWeaponFromCode(args[index]))
+					break;
+				}
+		}
+
+
 		if (args[index] in chosenClass.equipment[opt]) {
 			itemsChosen.push(...chosenClass.equipment[opt][args[index]])
 		}
