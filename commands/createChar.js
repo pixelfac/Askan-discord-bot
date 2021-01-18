@@ -337,9 +337,6 @@ var charSheet = { }
 //stores JSON of currently chosenClass
 var chosenClass = { }
 
-//stores reply from chose1stFeature
-var reply = "";
-
 //general purpose index for generating numbered lists
 var index = 1;
 
