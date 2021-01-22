@@ -7,10 +7,18 @@ module.exports = {
 		//if user uses 'reverse' command, move back one step
 		if (message.content.startsWith(`${prefix}reverse`) || message.content.startsWith(`${prefix}r`) || message.content.startsWith(`${prefix}REVERSE`)) {
 			currentStep -= 2;
+			
+			//allows user to reverse past the spellcasting step if they are not a spellcasting class
+			if (currentStep == 5 && !charSheet.spellcasting)
+				currentStep -= 1
+
+			//prevents negative values
 			if (currentStep < 0)
 				currentStep = 0;
+
 			isReverse = true;
 			console.log("Used Reverse command: went back a step.")
+			console.log("Current Step is:", createCharSteps[currentStep]);
 		}
 
 		//if user uses 'exit' command, reset current step to reset the createChar process
@@ -365,8 +373,8 @@ const allSimpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons_WithC
 const allSimpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons_WithCodes.json');
 
 // Character Creation Enum
-const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
-						"ABILITY_SCORES", "HEIGHT","ALIGNMENT", "BACKGROUND", "BACKGROUND_lang",
+const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE",
+						"RACE_ability-scores", "ABILITY_SCORES", "HEIGHT","ALIGNMENT", "BACKGROUND", "BACKGROUND_lang",
 						"BACKGROUND_equipment", "BACKGROUND_tools", "BACKGROUND_traits","BACKGROUND_ideals",
 						"BACKGROUND_bonds", "BACKGROUND_flaws" ]
 
@@ -843,6 +851,11 @@ function processClassSkills(message, args) {
 
 	if (args[0] == args[1]) {
 		message.channel.send("The arguments you have provided are the same. I am looking for 2 different numbers. E.G. `1 3`")
+		return null;
+	}
+
+	if (args.length < 2) {
+		message.channel.send("You have provided too few arguments. I am looking for only 2 numbers. E.G. `1 3`")
 		return null;
 	}
 
