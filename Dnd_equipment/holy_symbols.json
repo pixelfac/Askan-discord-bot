@@ -1,0 +1,18 @@
+[
+	{
+		"Name":"Amulet",
+		"Cost":"5 gp",
+		"Weight":"1 lb"
+	},
+	{
+		"Name":"Emblem",
+		"Cost":"5 gp",
+		"Weight":"0 lb"
+	},
+	{
+		"Name":"Reliquary",
+		"Cost":"5 gp",
+		"Weight":"2 lb"
+	}
+
+]
