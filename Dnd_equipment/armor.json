@@ -1,6 +1,120 @@
-{
-	"Chain Mail": { },
-	"Leather Armor": { },
-	"Shield":{ }
-
-}
+[
+	{
+		"Name": "Padded",
+        "Cost": "5 gp",
+        "Armor Class": "11 +DEX",
+        "Strength Req":0,
+        "Stealth Disadvantage":true,
+        "Weight": "8 lb",
+        "Type":"light"
+	},
+	{
+		"Name": "Leather",
+        "Cost": "10 gp",
+        "Armor Class": "11 +DEX",
+        "Strength Req":0,
+        "Stealth Disadvantage":false,
+        "Weight": "10 lb",
+        "Type":"light"
+	},
+	{
+		"Name": "Studded Leather",
+        "Cost": "45 gp",
+        "Armor Class": "12 +DEX",
+        "Strength Req":0,
+        "Stealth Disadvantage":false,
+        "Weight": "13 lb",
+        "Type":"light"
+	},
+	{
+		"Name": "Hide",
+        "Cost": "10 gp",
+        "Armor Class": "12 +DEX <=2",
+        "Strength Req":0,
+        "Stealth Disadvantage":false,
+        "Weight": "12 lb",
+        "Type":"medium"
+	},
+	{
+		"Name": "Chain Shirt",
+        "Cost": "50 gp",
+        "Armor Class": "13 +DEX <=2",
+        "Strength Req":0,
+        "Stealth Disadvantage":false,
+        "Weight": "20 lb",
+        "Type":"medium"
+	},
+	{
+		"Name": "Scale Mail",
+        "Cost": "50 gp",
+        "Armor Class": "14 +DEX <=2",
+        "Strength Req":0,
+        "Stealth Disadvantage":true,
+        "Weight": "45 lb",
+        "Type":"medium"
+	},
+	{
+		"Name": "Breastplate",
+        "Cost": "400 gp",
+        "Armor Class": "14 +DEX <=2",
+        "Strength Req":0,
+        "Stealth Disadvantage":false,
+        "Weight": "20 lb",
+        "Type":"medium"
+	},
+	{
+		"Name": "Half Plate",
+        "Cost": "750 gp",
+        "Armor Class": "15 +DEX <=2",
+        "Strength Req":0,
+        "Stealth Disadvantage":true,
+        "Weight": "40 lb",
+        "Type":"medium"
+	},
+	{
+		"Name": "Ring Mail",
+        "Cost": "30 gp",
+        "Armor Class": "14",
+        "Strength Req":0,
+        "Stealth Disadvantage":true,
+        "Weight": "40 lb",
+        "Type":"heavy"
+	},
+	{
+		"Name": "Chain Mail",
+        "Cost": "75 gp",
+        "Armor Class": "16",
+        "Strength Req":13,
+        "Stealth Disadvantage":true,
+        "Weight": "55 lb",
+        "Type":"heavy"
+	},
+	{
+		"Name": "Splint",
+        "Cost": "200 gp",
+        "Armor Class": "17",
+        "Strength Req":15,
+        "Stealth Disadvantage":true,
+        "Weight": "60 lb",
+        "Type":"heavy"
+	},
+	{
+		"Name": "Plate",
+        "Cost": "1500 gp",
+        "Armor Class": "18",
+        "Strength Req":15,
+        "Stealth Disadvantage":true,
+        "Weight": "65 lb",
+        "Type":"heavy"
+	},
+	{
+		"Name": "Shield",
+        "Cost": "10 gp",
+        "Armor Class": "2",
+        "Strength Req":0,
+        "Stealth Disadvantage":false,
+        "Weight": "6 lb",
+        "Type":"shield"
+	}
+	
+]
