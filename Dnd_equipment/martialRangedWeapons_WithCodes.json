@@ -1,1 +1,3 @@
-{"Blowgun":"mr1","Crossbow, Hand":"mr2","Crossbow, Heavy":"mr3","Longbow":"mr4","Net":"mr5"}
+{
+	"header":"mr",
+	"Blowgun":"mr1","Crossbow, Hand":"mr2","Crossbow, Heavy":"mr3","Longbow":"mr4","Net":"mr5"}

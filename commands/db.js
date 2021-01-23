@@ -1,8 +1,28 @@
+const fs = require('fs');
+
 module.exports = {
 	name: "db",
-	description: "database of Dnd terms and info",
+	description: "database reference of Dnd terms and info",
 	execute(prefix, message, args) {
 	
+		for (let list in listsOfItems) {
+			console.log(listsOfItems[list].header)
+			if (args[0] === listsOfItems[list].header) {
+				buildList(listsOfItems[list])
+				message.channel.send(reply)
+				return;
+			}
+		}
+
+		if (args[0] == 'help') {
+			message.channel.send("This command takes a category and returns the codes of all the items in that category. These codes are used for inputting selections into this bot, like in the 'createChar' command.")
+			return;
+		}
+
+
+		message.channel.send(`I don't know what database entry has the name: \`${args[0]}\`.`)
+
+/*
 		switch (args[0]) {
 
 			case "mm":
@@ -46,6 +66,7 @@ module.exports = {
 				break;
 
 		}
+	*/
 
     },
 };
@@ -55,19 +76,35 @@ var reply = ``;
 
 
 //import JSONs of all lists of weapons
+var listsOfItems = { }
+
+var codeFiles = fs.readdirSync('./Dnd_equipment').filter(file => file.endsWith('_WithCodes.json'));
+
+for (let filename of codeFiles) {
+   let codeJSON = require(`../Dnd_equipment/${filename}`);
+   listsOfItems[filename] = codeJSON;
+}
+
+/*
 const allMartialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons_WithCodes.json')
 const allMartialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons_WithCodes.json');
 const allSimpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons_WithCodes.json');
 const allSimpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons_WithCodes.json'); 
+*/
 
-//builds string of all weapons and codes formatted
-function buildWeaponReply(object) {
+//builds string of all items and codes formatted
+function buildList(object) {
+	reply = "```"
 	//if 'object' param does not have correct properties
 	try {
-		for (let weap in object) {
-			reply += `${weap} : ${object[weap]}\n`
+		for (let prop in object) {
+			if (prop == 'header')
+				continue;
+			reply += `${prop} : ${object[prop]}\n`
 		}
 	} catch (err) {
 		console.log("object does not have correct properties\n", err)
 	}
+
+	reply += "```"
 }
