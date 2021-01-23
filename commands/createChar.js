@@ -711,7 +711,7 @@ function isValidWeaponCode(code, options) {
 	if (options === "sw") 
 		return isValidWeaponCode(code, "sm") || isValidWeaponCode(code, "sr");
 
-	return (code.startsWith(options)) ? true : false;
+	return (code.startsWith(options) && parseInt(code.substring(2)) >= 0 && parseInt(code.substring(2)) <= Object.keys(chosenClass.equipment).length) ? true : false;
 }
 
 
@@ -935,6 +935,10 @@ function processClassEqpt(message, args) {
 					//add chosen weapon to chosen items
 					itemsChosen.push(getWeaponFromCode(args[index]))
 					break;
+				}
+				else {
+					message.channel.send(`Invalid input. I was looking for a code from the database at choice ${index+1}, but I recieved \`${args[index]}\`. Please try again.`)
+					return null;
 				}
 			}
 		}
