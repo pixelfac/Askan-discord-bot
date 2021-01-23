@@ -890,6 +890,10 @@ function processClassSkills(message, args) {
 //processes class equipment input
 //see case 5
 function processClassEqpt(message, args) {
+	//convert to lowercase to make input detection fuzzier
+	args = message.content.toLowerCase().split(' ')
+	console.log("lowercased args:", args)
+
 	let containsFree = 'free' in chosenClass.equipment;
 	let itemsChosen = []
 
@@ -902,7 +906,7 @@ function processClassEqpt(message, args) {
 
 	//insufficient parameters error catch
 	if (args.length < numOpt) {
-		message.channel.send(`Insufficient number of choices selected. We were looking for ${numOpt} choices. Please try again.`)
+		message.channel.send(`Insufficient number of choices selected. I was looking for ${numOpt} choices. Please try again.`)
 		return null;
 	}
 
@@ -919,13 +923,20 @@ function processClassEqpt(message, args) {
 		//check for 'mw', 'sr', etc
 		for (let arr in chosenClass.equipment[opt]) {
 			//if options allows selecting weapon using code
-			if (chosenClass.equipment[opt][arr][0] === 'mw' || chosenClass.equipment[opt][arr][0] === 'mm' || chosenClass.equipment[opt][arr][0] === 'mr' || chosenClass.equipment[opt][arr][0] === 'sw' || chosenClass.equipment[opt][arr][0] === 'sm' || chosenClass.equipment[opt][arr][0] === 'sr')
+			if (chosenClass.equipment[opt][arr][0] === 'mw' || chosenClass.equipment[opt][arr][0] === 'mm' || chosenClass.equipment[opt][arr][0] === 'mr' || chosenClass.equipment[opt][arr][0] === 'sw' || chosenClass.equipment[opt][arr][0] === 'sm' || chosenClass.equipment[opt][arr][0] === 'sr' || chosenClass.equipment[opt][arr][0] === 'hs' || chosenClass.equipment[opt][arr][0] === 'at' || chosenClass.equipment[opt][arr][0] === 'in') {
+				//if input is a through e, throw error
+				if (args[index] < 'f') {
+					message.channel.send(`Invalid input. I was looking for a code from the database at your ${index+1} selection, but I recieved \`${args[index]}\`. Please try again.`)
+					return null;
+				}
+
 				//if user input is valid code from given weapon lists
 				if (isValidWeaponCode(args[index],chosenClass.equipment[opt][arr][0])) {
 					//add chosen weapon to chosen items
 					itemsChosen.push(getWeaponFromCode(args[index]))
 					break;
 				}
+			}
 		}
 
 
