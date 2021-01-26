@@ -113,13 +113,35 @@ module.exports = {
 				}
 
 
-				reply = `Pick equipment from the following list.\n\`\`\``;
+				reply = 'Please select your starting equipment.\n';
+
+				for (let opt in chosenClass.equipment) {
+					//free if it exists, add those items in this format
+					if (opt === 'free') {
+						reply += `The following item(s) are given to you for free:\n`
+						for (let j=0;j < chosenClass.equipment.free.length-1; j++) {
+							reply += `\`${chosenClass.equipment.free[j]}\`, `
+						}
+						reply += `\`${chosenClass.equipment.free[chosenClass.equipment.free.length-1]}\`\n`
+
+					}
+					//if opt1, opt2, etc.
+					else {
+						reply += `Pick equipment from the following options. You cannot mix and match options:\n`
+						console.log(chosenClass.equipment[opt])
+						for (let abc in chosenClass.equipment[opt]) {
+							reply += `\`[${abc}] `
+							for (let k=0; k < chosenClass.equipment[opt][abc].length-1; k++) {
+								reply += `${expandDBCode(chosenClass.equipment[opt][abc][k])}, `
+							}
+							reply += `${expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length-1])}\`\n`
+						}
+						reply += `\n`
+					}
+				}
+
 
 			
-				reply += `${JSON.stringify(chosenClass.equipment)}`
-
-
-				reply += `\`\`\``
 
 				message.reply(reply)
 				currentStep += 1
@@ -505,7 +527,6 @@ const templateClass = {
 					}
 				},
 		"equipment":{
-			//semicolons are used as delimiters between items in the string
 			//when nothing is given without player input, 'free' array is empty
 			"free":[""],
 			"opt1":{
@@ -629,6 +650,7 @@ const classes = {
 			},
 		},
 		"equipment":{
+			"free":["debug","free","stuff"],
 			"opt1":{
 				"a":["mw"]
 			},
@@ -765,6 +787,32 @@ function getWeaponFromCode(code) {
 	return null;
 }
 
+function expandDBCode(str) {
+	switch (str) {
+		case 'mm':
+			return 'Any Martial Melee Weapon'
+		case 'mr':
+			return 'Any Martial Ranged Weapon'
+		case 'mw':
+			return 'Any Martial Weapon'
+		case 'sm':
+			return 'Any Simple Melee Weapon'
+		case 'sr':
+			return 'Any Simple Ranged Weapon'
+		case 'sw':
+			return 'Any Simple Weapon'
+		case 'at':
+			return 'Any Artisans Tools'
+		case 'hs':
+			return 'Any Holy Symbol'
+		case 'in':
+			return 'Any Instrument'
+		default:
+			return str;
+
+	}
+}
+
 
 //processes name input
 //see case 1
@@ -892,7 +940,6 @@ function processClassSkills(message, args) {
 function processClassEqpt(message, args) {
 	//convert to lowercase to make input detection fuzzier
 	args = message.content.toLowerCase().split(' ')
-	console.log("lowercased args:", args)
 
 	let containsFree = 'free' in chosenClass.equipment;
 	let itemsChosen = []
