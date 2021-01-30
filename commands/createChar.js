@@ -829,13 +829,13 @@ function dbAlertFromEqpt(equipment) {
 				for (let str in equipment[opt][arr])
 					if (equipment[opt][arr][str].length == 2 && !dbCodes.includes(equipment[opt][arr][str]))
 						dbCodes.push(equipment[opt][arr][str])
+	}
 
 	if (dbCodes.length != 0) {
 		rtrnStr = `At least one of the following options asks you to pick 'Any' item from a given list. To view that list of selectable items, use the command \`${prefix}db <db_code>\`. You will need to use the following codes:\n\n`;
 		for (let code of dbCodes)
 			rtrnStr += `Code: \`${code}\` for \`${expandDBCode(code)}\`\n`
 	}
-
 
 	return rtrnStr + "\n"
 }
