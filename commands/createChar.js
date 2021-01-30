@@ -130,7 +130,6 @@ module.exports = {
 					//if opt1, opt2, etc.
 					else {
 						reply += `Pick equipment from the following options. You cannot mix and match options:\n`
-						console.log(chosenClass.equipment[opt])
 						for (let abc in chosenClass.equipment[opt]) {
 							reply += `\`[${abc}] `
 							for (let k=0; k < chosenClass.equipment[opt][abc].length-1; k++) {
