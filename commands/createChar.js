@@ -795,14 +795,10 @@ function expandDBCode(str) {
 			return 'Any Martial Melee Weapon'
 		case 'mr':
 			return 'Any Martial Ranged Weapon'
-		case 'mw':
-			return 'Any Martial Weapon'
 		case 'sm':
 			return 'Any Simple Melee Weapon'
 		case 'sr':
 			return 'Any Simple Ranged Weapon'
-		case 'sw':
-			return 'Any Simple Weapon'
 		case 'at':
 			return 'Any Artisans Tools'
 		case 'hs':
@@ -816,6 +812,7 @@ function expandDBCode(str) {
 
 
 function dbAlertFromEqpt(equipment) {
+	//total list of codes found in equipment
 	let dbCodes = [];
 	let rtrnStr = "";
 
@@ -826,11 +823,31 @@ function dbAlertFromEqpt(equipment) {
 		//look through remaining options
 		else
 			for (let arr in equipment[opt])
-				for (let str in equipment[opt][arr])
-					if (equipment[opt][arr][str].length == 2 && !dbCodes.includes(equipment[opt][arr][str]))
-						dbCodes.push(equipment[opt][arr][str])
+				for (let str in equipment[opt][arr]) {
+					//if mw or sw, convert to mm + mr, etc.
+					switch (equipment[opt][arr][str]) {
+						case 'mw':
+							if (!dbCodes.includes('mm'))
+								dbCodes.push('mm')
+							if (!dbCodes.includes('mr'))
+								dbCodes.push('mr')
+							break;
+						case 'sw':
+							if (!dbCodes.includes('sm'))
+								dbCodes.push('sm')
+							if (!dbCodes.includes('sr'))
+								dbCodes.push('sr')
+							break;
+						//if not mw or sw, treat as normal code
+						default:
+							if (equipment[opt][arr][str].length == 2 && !dbCodes.includes(equipment[opt][arr][str]))
+								dbCodes.push(equipment[opt][arr][str])
+							break;
+					}
+				}
 	}
 
+	//build rtrn string
 	if (dbCodes.length != 0) {
 		rtrnStr = `At least one of the following options asks you to pick 'Any' item from a given list. To view that list of selectable items, use the command \`${prefix}db <db_code>\`. You will need to use the following codes:\n\n`;
 		for (let code of dbCodes)
