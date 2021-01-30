@@ -124,7 +124,7 @@ module.exports = {
 						for (let j=0;j < chosenClass.equipment.free.length-1; j++) {
 							reply += `\`${chosenClass.equipment.free[j]}\`, `
 						}
-						reply += `\`${chosenClass.equipment.free[chosenClass.equipment.free.length-1]}\`\n`
+						reply += `\`${chosenClass.equipment.free[chosenClass.equipment.free.length-1]}\`\n\n`
 
 					}
 					//if opt1, opt2, etc.
