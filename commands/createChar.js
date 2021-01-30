@@ -857,6 +857,27 @@ function dbAlertFromEqpt(equipment) {
 }
 
 
+//converts cardinal # -> ordinal #
+function cardinalToOrdinal(number) {
+    let lastNumberString = number.toString().slice(-1);
+
+    switch (lastNumberString) {
+    	case "1":
+    		if (number < 10 || number > 19)
+    			return number + "st"
+    	case "2":
+    	    if (number < 10 || number > 19)
+    			return number + "nd"
+    	case "3":
+    	    if (number < 10 || number > 19)
+    			return number + "rd"
+    	default:
+    		return number + "th"
+    		break;
+    }
+}
+
+
 
 //processes name input
 //see case 1
@@ -1017,7 +1038,7 @@ function processClassEqpt(message, args) {
 			if (chosenClass.equipment[opt][arr][0] === 'mw' || chosenClass.equipment[opt][arr][0] === 'mm' || chosenClass.equipment[opt][arr][0] === 'mr' || chosenClass.equipment[opt][arr][0] === 'sw' || chosenClass.equipment[opt][arr][0] === 'sm' || chosenClass.equipment[opt][arr][0] === 'sr' || chosenClass.equipment[opt][arr][0] === 'hs' || chosenClass.equipment[opt][arr][0] === 'at' || chosenClass.equipment[opt][arr][0] === 'in') {
 				//if input is a through e, throw error
 				if (args[index] < 'f') {
-					message.channel.send(`Invalid input. I was looking for a code from the database at your ${index+1} selection, but I recieved \`${args[index]}\`. Please try again.`)
+					message.channel.send(`Invalid input. I was looking for a code from the database at your ${cardinalToOrdinal(index+1)} selection, but I recieved \`${args[index]}\`. Please try again.`)
 					return null;
 				}
 
@@ -1028,7 +1049,7 @@ function processClassEqpt(message, args) {
 					break;
 				}
 				else {
-					message.channel.send(`Invalid input. I was looking for a code from the database at choice ${index+1}, but I recieved \`${args[index]}\`. Please try again.`)
+					message.channel.send(`Invalid input. I was looking for a code from the database at your ${cardinalToOrdinal(index+1)} selection, but I recieved \`${args[index]}\`. Please try again.`)
 					return null;
 				}
 			}
