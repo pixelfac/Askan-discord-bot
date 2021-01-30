@@ -115,6 +115,8 @@ module.exports = {
 
 				reply = 'Please select your starting equipment.\n';
 
+				reply += dbAlertFromEqpt(chosenClass.equipment)
+
 				for (let opt in chosenClass.equipment) {
 					//free if it exists, add those items in this format
 					if (opt === 'free') {
@@ -809,9 +811,35 @@ function expandDBCode(str) {
 			return 'Any Instrument'
 		default:
 			return str;
-
 	}
 }
+
+
+function dbAlertFromEqpt(equipment) {
+	let dbCodes = [];
+	let rtrnStr = "";
+
+	for (let opt in equipment) {
+		//skip free b/c it will never have a choice
+		if (opt === 'free')	continue;
+
+		//look through remaining options
+		else
+			for (let arr in equipment[opt])
+				for (let str in equipment[opt][arr])
+					if (equipment[opt][arr][str].length == 2 && !dbCodes.includes(equipment[opt][arr][str]))
+						dbCodes.push(equipment[opt][arr][str])
+
+	if (dbCodes.length != 0) {
+		rtrnStr = `At least one of the following options asks you to pick 'Any' item from a given list. To view that list of selectable items, use the command \`${prefix}db <db_code>\`. You will need to use the following codes:\n\n`;
+		for (let code of dbCodes)
+			rtrnStr += `Code: \`${code}\` for \`${expandDBCode(code)}\`\n`
+	}
+
+
+	return rtrnStr + "\n"
+}
+
 
 
 //processes name input
