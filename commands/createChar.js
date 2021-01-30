@@ -1031,13 +1031,12 @@ function processClassEqpt(message, args) {
 		if (opt === 'free')
 			continue;
 
-		console.log("opt", opt, "\nequipment", chosenClass.equipment[opt], "arg", args[index])
 		//check for 'mw', 'sr', etc
 		for (let arr in chosenClass.equipment[opt]) {
 			//if options allows selecting weapon using code
 			if (chosenClass.equipment[opt][arr][0] === 'mw' || chosenClass.equipment[opt][arr][0] === 'mm' || chosenClass.equipment[opt][arr][0] === 'mr' || chosenClass.equipment[opt][arr][0] === 'sw' || chosenClass.equipment[opt][arr][0] === 'sm' || chosenClass.equipment[opt][arr][0] === 'sr' || chosenClass.equipment[opt][arr][0] === 'hs' || chosenClass.equipment[opt][arr][0] === 'at' || chosenClass.equipment[opt][arr][0] === 'in') {
-				//if input is a through e, throw error
-				if (args[index] < 'f') {
+				//if input is a through e and a..e could not be valid inputs, throw err
+				if (args[index] < 'f' && Object.keys(chosenClass.equipment[opt]).length == 1) {
 					message.channel.send(`Invalid input. I was looking for a code from the database at your ${cardinalToOrdinal(index+1)} selection, but I recieved \`${args[index]}\`. Please try again.`)
 					return null;
 				}
@@ -1048,7 +1047,8 @@ function processClassEqpt(message, args) {
 					itemsChosen.push(getWeaponFromCode(args[index]))
 					break;
 				}
-				else {
+				//if letter input not allowed, letter matches option that has db code, or letter is out of bounds with expected range => throw error
+				else if (Object.keys(chosenClass.equipment[opt]).length == 1 || args[index] == arr || args[index].charCodeAt(0) <= 96 || args[index].charCodeAt(0) > (96 + Object.keys(chosenClass.equipment[opt]).length)){
 					message.channel.send(`Invalid input. I was looking for a code from the database at your ${cardinalToOrdinal(index+1)} selection, but I recieved \`${args[index]}\`. Please try again.`)
 					return null;
 				}
