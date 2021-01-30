@@ -1,4 +1,40 @@
-{
-	"Dungeoneer's Pack": { },
-	"Explorer's Pack": { }
-}
+[
+	{
+		"Name":"Burglar's Pack",
+		"Cost":"16 gp",
+		"Items":["backpack", "ball bearings x1000", "string 10ft", "bell", "candle x5", "crowbar", "hammer", "piton x10",
+				"hooded lantern", "oil flask x2", "rations (5 days)", "tinderbox", "waterskin", "rope (hempen) 50ft"]
+	},
+	{
+		"Name":"Diplomat's Pack",
+		"Cost":"39 gp",
+		"Items":["chest", "document case x2", "fine clothes (1 set)", "ink", "ink pen", "lamp", "oil flask x2",
+				"paper (5 sheets)", "perfume", "sealing wax", "soap"]
+	},
+	{
+		"Name":"Dungeoneer's Pack",
+		"Cost":"12 gp",
+		"Items":["backpack", "crowbar", "hammer", "piton x10", "torch x10", "oil flask x2", "rations (10 days)",
+				"tinderbox", "waterskin", "rope (hempen) 50ft"]
+	},
+	{
+		"Name":"Entertainer's Pack",
+		"Cost":"40 gp",
+		"Items":["backpack", "bedroll", "costumes (2 sets)", "candles x5", "rations (5 days)", "waterskin", "disguise kit"]
+	},
+	{
+		"Name":"Explorer's Pack",
+		"Cost":"10 gp",
+		"Items":["backpack", "bedroll", "mess kit", "tinderbox", "torch x10", "rations (10 days)", "waterskin", "rope (hempen) 50ft"]
+	},
+	{
+		"Name":"Priest's Pack",
+		"Cost":"19 gp",
+		"Items":["backpack", "blanket", "alms box", "incense (2 blocks)", "candle x10", "rations (2 days)", "tinderbox", "waterskin", "censer", "vestments"]
+	},
+	{
+		"Name":"Scholar's Pack",
+		"Cost":"40 gp",
+		"Items":["backpack", "book of lore", "ink", "ink pen", "parchment (5 sheets)", "bag of sand", "small knife"]
+	}
+]

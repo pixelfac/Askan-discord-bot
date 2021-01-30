@@ -1,0 +1,52 @@
+[
+	{
+		"Name":"Bagpipes",
+		"Cost":"30 gp",
+		"Weight":"6 lb"
+	},
+	{
+		"Name":"Drum",
+		"Cost":"6 gp",
+		"Weight":"3 lb"
+	},
+	{
+		"Name":"Dulcimer",
+		"Cost":"25 gp",
+		"Weight":"10 lb"
+	},
+	{
+		"Name":"Flute",
+		"Cost":"2 gp",
+		"Weight":"1 lb"
+	},
+	{
+		"Name":"Lute",
+		"Cost":"35 gp",
+		"Weight":"2 lb"
+	},
+	{
+		"Name":"Lyre",
+		"Cost":"30 gp",
+		"Weight":"2 lb"
+	},
+	{
+		"Name":"Horn",
+		"Cost":"3 gp",
+		"Weight":"2 lb"
+	},
+	{
+		"Name":"Pan Flute",
+		"Cost":"12 gp",
+		"Weight":"2 lb"
+	},
+	{
+		"Name":"Shawm",
+		"Cost":"2 gp",
+		"Weight":"1 lb"
+	},
+	{
+		"Name":"Viol",
+		"Cost":"30 gp",
+		"Weight":"1 lb"
+	}
+]

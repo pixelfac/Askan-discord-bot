@@ -15,6 +15,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 for (const file of commandFiles) {
    const command = require(`./commands/${file}`);
    client.commands.set(command.name, command);
+   console.log(command.name, "loaded!")
 }
 
 
@@ -42,6 +43,10 @@ client.on("message", function(message) {
   		case "ping":
   			client.commands.get("ping").execute(prefix, message, args);
     		break;
+
+      case "db":
+         client.commands.get("db").execute(prefix, message, args);
+         break;
 
     	//see gn.js
     	case "gn":
@@ -85,7 +90,7 @@ client.on("message", function(message) {
       case "r":
       case "REVERSE":
       	if (dndmode)
-         	client.commands.get("createChar").execute(prefix, message, message.content, args);
+         	client.commands.get("createChar").execute(prefix, message, args);
          break;
 
       //prints the chosen dnd charSheet
@@ -98,7 +103,7 @@ client.on("message", function(message) {
       case "x":
       case "EXIT":
       	dndmode = false;
-      	client.commands.get("createChar").execute(prefix, message, message.content, args);
+      	client.commands.get("createChar").execute(prefix, message, args);
       	message.channel.send("You've exited the current mode and can type regularly")
       	break;
 
@@ -107,7 +112,7 @@ client.on("message", function(message) {
       	args = message.content.split(' ');
 
       	if (dndmode && client.commands.get("createChar").config.author == message.author) {
-      		client.commands.get("createChar").execute(prefix, message, message.content, args);
+      		client.commands.get("createChar").execute(prefix, message, args);
       	}
       	break;
 

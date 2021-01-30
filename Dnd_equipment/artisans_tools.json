@@ -1,0 +1,87 @@
+[
+	{
+		"Name":"Alchemist's Supplies",
+		"Cost":"50 gp",
+		"Weight":"8 lb"
+	},
+	{
+		"Name":"Brewer's Supplies",
+		"Cost":"20 gp",
+		"Weight":"9 lb"
+	},
+	{
+		"Name":"Calligrapher's Supplies",
+		"Cost":"10 gp",
+		"Weight":"5 lb"
+	},
+	{
+		"Name":"Carpenter's Tools",
+		"Cost":"8 gp",
+		"Weight":"6 lb"
+	},
+	{
+		"Name":"Cartographer's Tools",
+		"Cost":"15 gp",
+		"Weight":"6 lb"
+	},
+	{
+		"Name":"Cobbler's Tools",
+		"Cost":"5 gp",
+		"Weight":"5 lb"
+	},
+	{
+		"Name":"Cook's Tools",
+		"Cost":"1 gp",
+		"Weight":"8 lb"
+	},
+	{
+		"Name":"Glassblower's Tools",
+		"Cost":"30 gp",
+		"Weight":"5 lb"
+	},
+	{
+		"Name":"Jeweler's Tools",
+		"Cost":"25 gp",
+		"Weight":"2 lb"
+	},
+	{
+		"Name":"Leatherworker's Tools",
+		"Cost":"5 gp",
+		"Weight":"5 lb"
+	},
+	{
+		"Name":"Mason's Tools",
+		"Cost":"10 gp",
+		"Weight":"8 lb"
+	},
+	{
+		"Name":"Painter's Tools",
+		"Cost":"10 gp",
+		"Weight":"5 lb"
+	},
+	{
+		"Name":"Potter's Tools",
+		"Cost":"10 gp",
+		"Weight":"3 lb"
+	},
+	{
+		"Name":"Smith's Tools",
+		"Cost":"20 gp",
+		"Weight":"8 lb"
+	},
+	{
+		"Name":"Tinker's Tools",
+		"Cost":"50 gp",
+		"Weight":"10 lb"
+	},
+	{
+		"Name":"Weaver's Tools",
+		"Cost":"1 gp",
+		"Weight":"5 lb"
+	},
+	{
+		"Name":"Woodcarver's Tools",
+		"Cost":"1 gp",
+		"Weight":"5 lb"
+	}
+]

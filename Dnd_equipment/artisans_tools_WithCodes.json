@@ -1,0 +1,21 @@
+ {
+	"header":"at",
+	"ListName":"Artisan's Tools",
+	"Alchemist's Supplies":"at1",
+	"Brewer's Supplies":"at2",
+	"Calligrapher's Supplies":"at3",
+	"Carpenter's Tools":"at4",
+	"Cartographer's Tools":"at5",
+	"Cobbler's Tools":"at6",
+	"Cook's Tools":"at7",
+	"Glassblower's Tools":"at8",
+	"Jeweler's Tools":"at9",
+	"Leatherworker's Tools":"at10",
+	"Mason's Tools":"at11",
+	"Painter's Tools":"at12",
+	"Potter's Tools":"at13",
+	"Smith's Tools":"at14",
+	"Tinker's Tools":"at15",
+	"Weaver's Tools":"at16",
+	"Woodcarver's Tools":"at17"
+}

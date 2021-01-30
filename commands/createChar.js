@@ -1,17 +1,24 @@
 module.exports = {
 	name: "createChar",
 	description: "Walks you through the process of creating a Dnd character from scratch",
-	execute(prefix, message, content, args) {
+	execute(prefix, message, args) {
 		module.exports.config.author = message.author;
-		//instance variable
-		var reply = "";
 
 		//if user uses 'reverse' command, move back one step
 		if (message.content.startsWith(`${prefix}reverse`) || message.content.startsWith(`${prefix}r`) || message.content.startsWith(`${prefix}REVERSE`)) {
 			currentStep -= 2;
+			
+			//allows user to reverse past the spellcasting step if they are not a spellcasting class
+			if (currentStep == 5 && !charSheet.spellcasting)
+				currentStep -= 1
+
+			//prevents negative values
 			if (currentStep < 0)
 				currentStep = 0;
+
 			isReverse = true;
+			console.log("Used Reverse command: went back a step.")
+			console.log("Current Step is:", createCharSteps[currentStep]);
 		}
 
 		//if user uses 'exit' command, reset current step to reset the createChar process
@@ -19,6 +26,7 @@ module.exports = {
 			currentStep = 0;
 			charSheet = JSON.parse(JSON.stringify(templateCharSheet));
 			dndmode = false;
+			console.log('Used Exit commant: exited dndmode')
 			return;
 		}
 
@@ -39,27 +47,23 @@ module.exports = {
 
 			case 1: //processes name
 				if (!isReverse) {
-					//add in functionality to randomize the character name based off of the race given the '-random' tag in the name var
-
-					//removes nonfilename chars from name
-					let name = content.replace(/[<>:"/\\|?*]/g, "_");
-					charSheet.name = name
-					message.channel.send(`Your character's name is \`${name}\`.`)
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
+					reply = processName(message)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
+
+
 				message.reply("Please enter your sex: Type '1' for Male, '2' for Female\n```[1] Male\n[2]Female```")
 				currentStep += 1
 				break;
 
 			case 2: //processes sex
 				if (!isReverse) {
-					if (content == 1) charSheet.sex = 1;
-					else if (content == 2) charSheet.sex = 0;
-					else {
-						message.channel.send(`Your input was not valid. I was expecting '1' or '2' and I received '${content}'. Please try again.`);
-						return;
-					}
-
-					message.channel.send(`Your character's sex is \`${(charSheet.sex == 1) ? 'Male' : 'Female'}\`.`)
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
+					reply = processSex(message)
+					if (reply === null) return;
+					message.channel.send(reply) 
 				}
 
 				//create and print a string of the class options
@@ -78,52 +82,12 @@ module.exports = {
 
 			case 3: //processes class
 				if (!isReverse) {
-
-					//iterate through all currently implemented classes and if content matches the class name, assign those class values to the charSheet
-					index = 1;
-					for (let cls in classes) {
-						if (content == index) {
-							chosenClass = classes[cls];
-							//set target class to lvl 1
-							charSheet.class[chosenClass.name] = 1;
-							charSheet.hitDice = chosenClass.hitDice;
-							charSheet.hp = chosenClass.hp;
-							charSheet.hpMax = chosenClass.hp;
-							charSheet.hpPerLevel = chosenClass.hpPerLevel;
-							//set saving throw proficiency
-							for (let i = 0; i < chosenClass.savingThrows.length; i++) {
-								if (charSheet.savingThrows[i] || chosenClass.savingThrows[i])
-									charSheet.savingThrows[i] = 1;
-								else charSheet.savingThrows[i] = 0;
-							}
-							//set other proficiencies
-							charSheet.armorProf.push(...chosenClass.armorProf)
-							charSheet.toolProf.push(...chosenClass.toolProf)
-							charSheet.weaponProf.push(...chosenClass.weaponProf)
-
-							for (let ftr in chosenClass.features) {
-								if (chosenClass.features[ftr].level == 1)
-									charSheet.features[ftr] = chosenClass.features[ftr]
-							}
-							break;
-						}
-						index++;
-
-
-					}
-
-					//out of bounds response catch
-					if (charSheet.hp === 0) {
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${content}'. Please try again.`);
-						return;
-					}
-
-					message.channel.send(`Your starting class is \`${chosenClass.name}\`.`)
-
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
+					reply = processClass(message)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 				
-
-
 
 				reply = `Pick 2 skills from the following list. Input your choices with a space in between, i.e. \`1 3\` to pick the first and third skills\n\`\`\``
 				//prints formatted list of all skills for each class
@@ -142,50 +106,43 @@ module.exports = {
 
 			case 4: //processes class skills
 				if (!isReverse) {
-
-					//if too many args
-					if (args.length > 2) {
-						message.channel.send("You have provided too many arguments. I am looking for only 2 numbers. E.G. `1 3`")
-						return;
-					}
-
-					if (args[0] == args[1]) {
-						message.channel.send("The arguments you have provided are the same. I am looking for 2 different numbers. E.G. `1 3`")
-						return;
-					}
-
-					//select skills from input and add to charSheet
-					index = 1;
-					for (skill of chosenClass.skillProf) {
-						if (index == args[0] || index == args[1])
-							charSheet.skillProf.push(chosenClass.skillProf[index-1])
-						index++;
-					}
-
-					//if user input didn't match expected range
-					if (charSheet.skillProf.length < 2) {
-						message.channel.send(`Your input was not valid. I was expecting 2 integers between 1 and ${index-1} and I received '${args[0]} and ${args[1]}'. Please try again.`);
-						return;
-					}
-					
-					message.channel.send(`The skills \`${charSheet.skillProf[0]}\` and \`${charSheet.skillProf[1]}\` have been added to your list of proficiencies.`)
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
+					reply = processClassSkills(message, args)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 
 
+				reply = 'Please select your starting equipment.\n';
 
+				reply += dbAlertFromEqpt(chosenClass.equipment)
 
+				for (let opt in chosenClass.equipment) {
+					//free if it exists, add those items in this format
+					if (opt === 'free') {
+						reply += `The following item(s) are given to you for free:\n`
+						for (let j=0;j < chosenClass.equipment.free.length-1; j++) {
+							reply += `\`${chosenClass.equipment.free[j]}\`, `
+						}
+						reply += `\`${chosenClass.equipment.free[chosenClass.equipment.free.length-1]}\`\n\n`
 
-				reply = `Pick equipment from the following list.\n\`\`\`neat`;
-
-				for (let arr in chosenClass.equipment) {
-					//prints all martial weapons if possible
-					if (Array.isArray(chosenClass.equipment[arr]) && chosenClass.equipment[arr].includes("Any Martial Weapon"))
-						console.log(allMartialWeapons())
-					else console.log(chosenClass.equipment[arr])
+					}
+					//if opt1, opt2, etc.
+					else {
+						reply += `Pick equipment from the following options. You cannot mix and match options:\n`
+						for (let abc in chosenClass.equipment[opt]) {
+							reply += `\`[${abc}] `
+							for (let k=0; k < chosenClass.equipment[opt][abc].length-1; k++) {
+								reply += `${expandDBCode(chosenClass.equipment[opt][abc][k])}, `
+							}
+							reply += `${expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length-1])}\`\n`
+						}
+						reply += `\n`
+					}
 				}
 
 
-				reply += `\`\`\``
+			
 
 				message.reply(reply)
 				currentStep += 1
@@ -194,7 +151,10 @@ module.exports = {
 
 			case 5: //processes class equipment
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
+					reply = processClassEqpt(message, args)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 
 
@@ -208,10 +168,10 @@ module.exports = {
 				else {
 					//if chosenClass needs to select a 1st level Feature
 					if ("choselvl1" in chosenClass.features) {
-						//stores correct message in chose1stFeatureReply
+						//stores correct message in reply
 						chose1stFeature(chosenClass)
 						//prints message to user
-						message.reply(chose1stFeatureReply)
+						message.reply(reply)
 					}
 					else {
 						message.reply("Please enter your race")
@@ -225,15 +185,15 @@ module.exports = {
 
 			case 6: //processes spells
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				//if chosenClass needs to select a 1st level Feature
 				if ("choselvl1" in chosenClass.features) {
-					//stores correct message in chose1stFeatureReply
+					//stores correct message in reply
 					chose1stFeature(chosenClass)
 					//prints message to user
-					message.reply(chose1stFeatureReply)
+					message.reply(reply)
 				}
 				else {
 					message.reply("Please enter your race")
@@ -244,27 +204,10 @@ module.exports = {
 
 			case 7: //processes features
 				if (!isReverse) {
-						
-					index = 1;
-					//switch used to detect if user inputed valid option
-					let noMatch = true;
-					for (let feat in chosenClass.features.choselvl1) {
-						if (content == index) {
-							//adds chosen feature to list of charSheet Features
-							charSheet.features[feat] = chosenClass.features.choselvl1[feat];
-							message.channel.send(`\`${feat}\` has been added to your character sheet`)
-							noMatch = false;
-							break;
-						}
-						index++;
-					}
-
-					//out of bounds response catch
-					if (noMatch) {
-						message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${content}'. Please try again.`);
-						return;
-					}
-
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
+					reply = processClassFeatures(message)
+					if (reply === null) return;
+					message.channel.send(reply)
 				}
 
 				message.reply("Please enter your race")
@@ -273,7 +216,7 @@ module.exports = {
 
 			case 8:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your race ability scores")
@@ -282,7 +225,7 @@ module.exports = {
 
 			case 9:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your ability scores")
@@ -291,7 +234,7 @@ module.exports = {
 
 			case 10:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your height")
@@ -300,7 +243,7 @@ module.exports = {
 
 			case 11:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your alignment")
@@ -309,7 +252,7 @@ module.exports = {
 
 			case 12:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background")
@@ -318,7 +261,7 @@ module.exports = {
 
 			case 13:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background languages")
@@ -327,7 +270,7 @@ module.exports = {
 
 			case 14:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background equipment")
@@ -336,7 +279,7 @@ module.exports = {
 
 			case 15:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background tools")
@@ -345,7 +288,7 @@ module.exports = {
 
 			case 16:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background traits")
@@ -354,7 +297,7 @@ module.exports = {
 
 			case 17:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background ideals")
@@ -363,7 +306,7 @@ module.exports = {
 
 			case 18:
 				if (!isReverse) {
-					
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background bonds")
@@ -371,8 +314,8 @@ module.exports = {
 				break;
 
 			case 19:	
-					if (!isReverse) {
-					
+				if (!isReverse) {
+					console.log(createCharSteps[currentStep-1] + ":", message.content)
 				}
 
 				message.reply("Please enter your background flaws")
@@ -425,29 +368,41 @@ var charSheet = { }
 //stores JSON of currently chosenClass
 var chosenClass = { }
 
-//stores reply from chose1stFeature
-var chose1stFeatureReply = "";
-
 //general purpose index for generating numbered lists
 var index = 1;
 
+//string filled with messages/responses sent to user
+var reply = "";
 
 
 //---'Class' Variables---//
 
 
+//---Init Stuff---//
+
 const { token, prefix } = require('../config.json');
 const fs = require('fs') ;
 
-//import weapon arrays
+//import weapon json arrays
 const martialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons.json');
 const martialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons.json');
+const simpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons.json');
+const simpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons.json');
+
+//assigns all arrays of weapon classes
+const allMartialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons_WithCodes.json')
+const allMartialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons_WithCodes.json');
+const allSimpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons_WithCodes.json');
+const allSimpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons_WithCodes.json');
 
 // Character Creation Enum
-const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE", "RACE_ability-scores",
-						"ABILITY_SCORES", "HEIGHT","ALIGNMENT", "BACKGROUND", "BACKGROUND_lang",
+const createCharSteps = [ "NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE",
+						"RACE_ability-scores", "ABILITY_SCORES", "HEIGHT","ALIGNMENT", "BACKGROUND", "BACKGROUND_lang",
 						"BACKGROUND_equipment", "BACKGROUND_tools", "BACKGROUND_traits","BACKGROUND_ideals",
 						"BACKGROUND_bonds", "BACKGROUND_flaws" ]
+
+//---Init Stuff---//
+
 
 
 //---Formating Info---//
@@ -473,8 +428,6 @@ also has 'opt' properties which store the options the player has to chose betwee
 */
 //---Formatting Info---//
 
-
-
 //template character sheet JSON used to reset the charSheet after a character is created
 //is instantiated at first step
 var templateCharSheet = {
@@ -483,18 +436,19 @@ var templateCharSheet = {
 			"race":{},
 			"subrace":{},
 			"level":1,
-			"class": {  "Barbarian":0,
-						"Bard":0,
-						"Cleric":0,
-						"Druid":0,
-						"Fighter":0,
-						"Monk":0,
-						"Paladin":0,
-						"Ranger":0,
-						"Sorcerer":0,
-						"Warlock":0,
-						"Wizard":0,
-					},
+			"class": {  
+				"Barbarian":0,
+				"Bard":0,
+				"Cleric":0,
+				"Druid":0,
+				"Fighter":0,
+				"Monk":0,
+				"Paladin":0,
+				"Ranger":0,
+				"Sorcerer":0,
+				"Warlock":0,
+				"Wizard":0,
+			},
 			"features":[],
 			"armorProf":[],
 			"toolProf":[],
@@ -545,8 +499,6 @@ const templateRace = {
 const dwarf = require("../Dnd_races/dwarf.json");
 const elf = require("../Dnd_races/elf.json");
 
-//update for each race added above
-const raceDesc = `[1] ${dwarf.name}\n[2] ${elf.name}`
 //---Race Info---//
 
 
@@ -576,7 +528,6 @@ const templateClass = {
 					}
 				},
 		"equipment":{
-			//semicolons are used as delimiters between items in the string
 			//when nothing is given without player input, 'free' array is empty
 			"free":[""],
 			"opt1":{
@@ -700,16 +651,19 @@ const classes = {
 			},
 		},
 		"equipment":{
-			"free":["Any Martial Weapon"],
+			"free":["debug","free","stuff"],
 			"opt1":{
+				"a":["mw"]
+			},
+			"opt2":{
 				"a":["Chain Mail"],
 				"b":["Leather Armor", "Longbow", "Arrow x20"]
 			},
-			"opt2":{
-				"a":["Shield"],
-				"b":["Any Martial Weapon"]
-			},
 			"opt3":{
+				"a":["Shield"],
+				"b":["mw"]
+			},
+			"opt4":{
 				"a":["Crossbow, light","Bolt x20"],
 				"b":["Handaxe x2"]
 			}
@@ -726,42 +680,418 @@ const classSpellList = require('../Dnd_classes/classSpellList.json');
 
 //---Helper Functions---//
 
-//writes to chose1stFeatureReply the options that a class has as their first feature 
+//writes to reply the options that a class has as their first feature 
 function chose1stFeature(chosenClass) {
 
 	switch (chosenClass.name) {
 
 		case "Fighter":
-			chose1stFeatureReply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n```";
+			reply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n```";
 
 			index = 1;
 			for (let style in chosenClass.features.choselvl1) {
-				chose1stFeatureReply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n\n`
+				reply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n\n`
 				index++;
 			}
-			chose1stFeatureReply += "```";
+			reply += "```";
 			return true;
 			break;
 
 		default:
-			chose1stFeatureReply = "ERROR: chosenClass was believed to have 1st level feature options but does not";
+			reply = "ERROR: chosenClass was believed to have 1st level feature options but does not";
 			break;
 
 	}
 
 }
 
+//used to check if str is int [0,9]
+function isNatNum(str) {
+	switch (str) {
+		case "0":
+		case "1":
+		case "2":
+		case "3":
+		case "4":
+		case "5":
+		case "6":
+		case "7":
+		case "8":
+		case "9":
+			return true;
+			break;
+		default:
+			return false;
 
-function allMartialWeapons() {
-	let list = [];
-
-	for (let weap of martialMeleeWeapons) 
-		list.push(weap.Name) 
-
-	for (let weap of martialRangedWeapons)
-		list.push(weap.Name)
-
-	return list
+	}
 }
+
+//returns true if weapon code is contained within options (mm,sr,mw,etc), false otherwise
+function isValidWeaponCode(code, options) {
+	//if both melee and ranged weapons are included in options
+	if (options === "mw") 
+		return isValidWeaponCode(code, "mm") || isValidWeaponCode(code, "mr");
+	if (options === "sw") 
+		return isValidWeaponCode(code, "sm") || isValidWeaponCode(code, "sr");
+
+	return (code.startsWith(options) && parseInt(code.substring(2)) >= 0 && parseInt(code.substring(2)) <= Object.keys(chosenClass.equipment).length) ? true : false;
+}
+
+
+//returns int
+//used to parse equipment strings
+function getQuantityFromStr(str) {
+	return parseInt(str.substring(str.lastIndexOf("x")+1))
+}
+
+
+function formatItemQuantity(str) {
+	//if str isn't in quantity format
+	if (isNaN(parseInt(str.substring(str.lastIndexOf("x")+1))))
+		return str;
+
+	let num = getQuantityFromStr(str)
+	let item = str.substring(0,str.lastIndexOf("x")).trim();
+	return `${num} ${item}s`
+}
+
+//takes a weapon code and returns the full name of that weapon
+function getWeaponFromCode(code) {
+	let weaponJSON;
+	switch (code.substr(0,2)) {
+
+		case "mm":
+			weaponJSON = allMartialMeleeWeapons;
+			break;
+
+		case "mr":
+			weaponJSON = allMartialRangedWeapons;
+			break;
+
+		case "sm":
+			weaponJSON = allSimpleMeleeWeapons;
+			break;
+
+		case "sr":
+			weaponJSON = allSimpleRangedWeapons;
+
+		default:
+			//error no match found
+			return null;
+	}
+
+	for (let name in weaponJSON) {
+		if (weaponJSON[name] === code)
+			return name;
+	}
+	//error no match found in database
+	return null;
+}
+
+function expandDBCode(str) {
+	switch (str) {
+		case 'mm':
+			return 'Any Martial Melee Weapon'
+		case 'mr':
+			return 'Any Martial Ranged Weapon'
+		case 'sm':
+			return 'Any Simple Melee Weapon'
+		case 'sr':
+			return 'Any Simple Ranged Weapon'
+		case 'at':
+			return 'Any Artisans Tools'
+		case 'hs':
+			return 'Any Holy Symbol'
+		case 'in':
+			return 'Any Instrument'
+		default:
+			return str;
+	}
+}
+
+
+function dbAlertFromEqpt(equipment) {
+	//total list of codes found in equipment
+	let dbCodes = [];
+	let rtrnStr = "";
+
+	for (let opt in equipment) {
+		//skip free b/c it will never have a choice
+		if (opt === 'free')	continue;
+
+		//look through remaining options
+		else
+			for (let arr in equipment[opt])
+				for (let str in equipment[opt][arr]) {
+					//if mw or sw, convert to mm + mr, etc.
+					switch (equipment[opt][arr][str]) {
+						case 'mw':
+							if (!dbCodes.includes('mm'))
+								dbCodes.push('mm')
+							if (!dbCodes.includes('mr'))
+								dbCodes.push('mr')
+							break;
+						case 'sw':
+							if (!dbCodes.includes('sm'))
+								dbCodes.push('sm')
+							if (!dbCodes.includes('sr'))
+								dbCodes.push('sr')
+							break;
+						//if not mw or sw, treat as normal code
+						default:
+							if (equipment[opt][arr][str].length == 2 && !dbCodes.includes(equipment[opt][arr][str]))
+								dbCodes.push(equipment[opt][arr][str])
+							break;
+					}
+				}
+	}
+
+	//build rtrn string
+	if (dbCodes.length != 0) {
+		rtrnStr = `At least one of the following options asks you to pick 'Any' item from a given list. To view that list of selectable items, use the command \`${prefix}db <db_code>\`. You will need to use the following codes:\n\n`;
+		for (let code of dbCodes)
+			rtrnStr += `Code: \`${code}\` for \`${expandDBCode(code)}\`\n`
+	}
+
+	return rtrnStr + "\n"
+}
+
+
+//converts cardinal # -> ordinal #
+function cardinalToOrdinal(number) {
+    let lastNumberString = number.toString().slice(-1);
+
+    switch (lastNumberString) {
+    	case "1":
+    		if (number < 10 || number > 19)
+    			return number + "st"
+    	case "2":
+    	    if (number < 10 || number > 19)
+    			return number + "nd"
+    	case "3":
+    	    if (number < 10 || number > 19)
+    			return number + "rd"
+    	default:
+    		return number + "th"
+    		break;
+    }
+}
+
+
+
+//processes name input
+//see case 1
+function processName(message) {
+	//removes nonfilename chars from name
+	let name = message.content.replace(/[<>:"/\\|?*]/g, "_");
+	charSheet.name = name
+	return `Your character's name is \`${name}\`.`;
+}
+
+//processes sex input
+//see case 2
+function processSex(message) {
+	if (message.content == 1) charSheet.sex = 1;		//Male
+	else if (message.content == 2) charSheet.sex = 0;	//Female
+	else {
+		//error message
+		message.channel.send(`Your input was not valid. I was expecting '1' or '2' and I received '${message.content}'. Please try again.`);
+		//cue to abort process
+		return null;
+	}
+	return `Your characters sex is \`${(charSheet.sex === 1) ? 'Male':'Female'}\`.`
+}
+
+//processes class input
+//see case 3
+function processClass(message) {
+
+	//error catch; if input is valid natural number 
+	if (!isNatNum(message.content)) {
+		message.channel.send(`Your input was not valid. I was expecting an integer and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
+	//iterate through all currently implemented classes and if content matches the class name, assign those class values to the charSheet
+	index = 1;
+	for (let cls in classes) {
+		if (message.content == index) {
+			chosenClass = classes[cls];
+			//set target class to lvl 1
+			charSheet.class[chosenClass.name] = 1;
+			charSheet.hitDice = chosenClass.hitDice;
+			charSheet.hp = chosenClass.hp;
+			charSheet.hpMax = chosenClass.hp;
+			charSheet.hpPerLevel = chosenClass.hpPerLevel;
+			//set saving throw proficiency
+			for (let i = 0; i < chosenClass.savingThrows.length; i++) {
+				if (charSheet.savingThrows[i] || chosenClass.savingThrows[i])
+					charSheet.savingThrows[i] = 1;
+				else charSheet.savingThrows[i] = 0;
+			}
+			//set other proficiencies
+			charSheet.armorProf.push(...chosenClass.armorProf)
+			charSheet.toolProf.push(...chosenClass.toolProf)
+			charSheet.weaponProf.push(...chosenClass.weaponProf)
+
+			for (let ftr in chosenClass.features) {
+				if (chosenClass.features[ftr].level == 1)
+					charSheet.features[ftr] = chosenClass.features[ftr]
+			}
+		}
+		break;
+		index++;
+	}
+
+	//out of bounds response catch
+	if (charSheet.hp === 0) {
+		message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index} and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
+	return `Your starting class is \`${chosenClass.name}\`.`;
+
+}
+
+//processes class input
+//see case 4
+function processClassSkills(message, args) {
+	//if too many args
+	if (args.length > 2) {
+		message.channel.send("You have provided too many arguments. I am looking for only 2 numbers. E.G. `1 3`")
+		return null;
+	}
+
+	if (args[0] == args[1]) {
+		message.channel.send("The arguments you have provided are the same. I am looking for 2 different numbers. E.G. `1 3`")
+		return null;
+	}
+
+	if (args.length < 2) {
+		message.channel.send("You have provided too few arguments. I am looking for only 2 numbers. E.G. `1 3`")
+		return null;
+	}
+
+	if (!isNatNum(args[0])) {
+		message.channel.send(`Your input was not valid. I was expecting an integer and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
+	if (!isNatNum(args[1])) {
+		message.channel.send(`Your input was not valid. I was expecting an integer and I received '${message.content}'. Please try again.`);
+		return null;
+	}
+
+	//select skills from input and add to charSheet
+	index = 1;
+	for (skill of chosenClass.skillProf) {
+		if (index == args[0] || index == args[1])
+			charSheet.skillProf.push(chosenClass.skillProf[index-1])
+		index++;
+	}
+
+	//if user input didn't match expected range
+	if (charSheet.skillProf.length < 2) {
+		message.channel.send(`Your input was not valid. I was expecting 2 integers between 1 and ${index-1} and I received '${args[0]} and ${args[1]}'. Please try again.`);
+		return null;
+	}
+
+	return `The skills \`${charSheet.skillProf[0]}\` and \`${charSheet.skillProf[1]}\` have been added to your list of proficiencies.`;
+					
+}
+
+//processes class equipment input
+//see case 5
+function processClassEqpt(message, args) {
+	//convert to lowercase to make input detection fuzzier
+	args = message.content.toLowerCase().split(' ')
+
+	let containsFree = 'free' in chosenClass.equipment;
+	let itemsChosen = []
+
+	//add free equipment to charSheet
+	if (containsFree)
+		itemsChosen.push(...chosenClass.equipment.free);
+
+	//count number of options
+	let numOpt = Object.keys(chosenClass.equipment).length + ((containsFree)?-1:0);
+
+	//insufficient parameters error catch
+	if (args.length < numOpt) {
+		message.channel.send(`Insufficient number of choices selected. I was looking for ${numOpt} choices. Please try again.`)
+		return null;
+	}
+
+
+	//iterate through arguments to see if there is a match
+	//if so, add to list of itemsChosen
+	index = 0;
+	for (let opt in chosenClass.equipment) {
+		//skip free if it exists
+		if (opt === 'free')
+			continue;
+
+		//check for 'mw', 'sr', etc
+		for (let arr in chosenClass.equipment[opt]) {
+			//if options allows selecting weapon using code
+			if (chosenClass.equipment[opt][arr][0] === 'mw' || chosenClass.equipment[opt][arr][0] === 'mm' || chosenClass.equipment[opt][arr][0] === 'mr' || chosenClass.equipment[opt][arr][0] === 'sw' || chosenClass.equipment[opt][arr][0] === 'sm' || chosenClass.equipment[opt][arr][0] === 'sr' || chosenClass.equipment[opt][arr][0] === 'hs' || chosenClass.equipment[opt][arr][0] === 'at' || chosenClass.equipment[opt][arr][0] === 'in') {
+				//if input is a through e and a..e could not be valid inputs, throw err
+				if (args[index] < 'f' && Object.keys(chosenClass.equipment[opt]).length == 1) {
+					message.channel.send(`Invalid input. I was looking for a code from the database at your ${cardinalToOrdinal(index+1)} selection, but I recieved \`${args[index]}\`. Please try again.`)
+					return null;
+				}
+
+				//if user input is valid code from given weapon lists
+				if (isValidWeaponCode(args[index],chosenClass.equipment[opt][arr][0])) {
+					//add chosen weapon to chosen items
+					itemsChosen.push(getWeaponFromCode(args[index]))
+					break;
+				}
+				//if letter input not allowed, letter matches option that has db code, or letter is out of bounds with expected range => throw error
+				else if (Object.keys(chosenClass.equipment[opt]).length == 1 || args[index] == arr || args[index].charCodeAt(0) <= 96 || args[index].charCodeAt(0) > (96 + Object.keys(chosenClass.equipment[opt]).length)){
+					message.channel.send(`Invalid input. I was looking for a code from the database at your ${cardinalToOrdinal(index+1)} selection, but I recieved \`${args[index]}\`. Please try again.`)
+					return null;
+				}
+			}
+		}
+
+
+		if (args[index] in chosenClass.equipment[opt]) {
+			itemsChosen.push(...chosenClass.equipment[opt][args[index]])
+		}
+		index++;
+	}
+
+	
+	charSheet.inventory.push(...itemsChosen)
+
+	let rtrn = "The equipment that you have chosen are as follows: ";
+	for (let item of itemsChosen) {
+		rtrn += `\`${formatItemQuantity(item)}\`, `
+	}
+	return rtrn.substr(0,rtrn.length-2)
+
+
+}
+
+//processes class features
+//see case 6
+function processClassFeatures(message) {
+	index = 1;
+	//switch used to detect if user inputed valid option
+	for (let feat in chosenClass.features.choselvl1) {
+		if (message.content == index) {
+			//adds chosen feature to list of charSheet Features
+			charSheet.features[feat] = chosenClass.features.choselvl1[feat];
+			return `\`${feat}\` has been added to your character sheet`
+		}
+		index++;
+	}
+
+	//out of bounds response catch
+	message.channel.send(`Your input was not valid. I was expecting an integer between 1 and ${index-1} and I received '${message.content}'. Please try again.`);
+	return null;
+}
+
 
 //---Helper Functions---//
