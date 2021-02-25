@@ -37,11 +37,7 @@ module.exports = {
 		switch (currentStep) {
 
 			case 0:
-				//instantiate blank charSheet
-				charSheet = JSON.parse(JSON.stringify(templateCharSheet));
-				message.reply(`Welcome to the DnD Character Creator! If at any point you would like to go back a step, type '${prefix}reverse'. To exit the creator, type '${prefix}exit'. Note: character information will not be saved if you exit before the creation is finished. Now let's begin! Please enter your characters name as you would like it to be written in your character sheet, including any titles and suffixes.\nE.G. \`Lord Bartholomew the Brave\``)
-				//locks conversation to only take responses from the original cmd author
-				module.exports.config.author = message.author;
+				askName(message)
 				currentStep += 1
 				break;
 
@@ -885,6 +881,25 @@ function cardinalToOrdinal(number) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+function askName(message) {
+	//instantiate blank charSheet
+	charSheet = JSON.parse(JSON.stringify(templateCharSheet));
+	message.reply(`Welcome to the DnD Character Creator! If at any point you would like to go back a step, type '${prefix}reverse'. To exit the creator, type '${prefix}exit'. Note: character information will not be saved if you exit before the creation is finished. Now let's begin! Please enter your characters name as you would like it to be written in your character sheet, including any titles and suffixes.\nE.G. \`Lord Bartholomew the Brave\``)
+	//locks conversation to only take responses from the original cmd author
+	module.exports.config.author = message.author;
+}
 
 //processes name input
 //see case 1
