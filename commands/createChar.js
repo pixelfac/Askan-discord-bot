@@ -68,7 +68,6 @@ module.exports = {
 				currentStep += 1
 				break;
 
-
 			case 3: //processes class
 				if (!isReverse) {
 					console.log(createCharSteps[currentStep - 1] + ":", message.content)
@@ -95,7 +94,6 @@ module.exports = {
 				currentStep += 1
 				break;
 
-
 			case 5: //processes class equipment
 				if (!isReverse) {
 					console.log(createCharSteps[currentStep - 1] + ":", message.content)
@@ -108,15 +106,11 @@ module.exports = {
 				//if chosenClass can cast spells, proceed as usual, otherwise skip this step
 				if (chosenClass.spellcasting) {
 					askSpells(message)
-
 				}
 				else {
 					//if chosenClass needs to select a 1st level Feature
 					if ("choselvl1" in chosenClass.features) {
-						//stores correct message in reply
-						chose1stFeature(chosenClass)
-						//prints message to user
-						message.reply(reply)
+						askClassFeatures(message)
 					}
 					else {
 						askRace(message)
@@ -127,7 +121,6 @@ module.exports = {
 				currentStep += 1
 				break;
 
-
 			case 6: //processes spells
 				if (!isReverse) {
 					console.log(createCharSteps[currentStep - 1] + ":", message.content)
@@ -135,10 +128,7 @@ module.exports = {
 
 				//if chosenClass needs to select a 1st level Feature
 				if ("choselvl1" in chosenClass.features) {
-					//stores correct message in reply
-					chose1stFeature(chosenClass)
-					//prints message to user
-					message.reply(reply)
+					askClassFeatures(message)
 				}
 				else {
 					askRace(message)
@@ -626,7 +616,7 @@ const classSpellList = require('../Dnd_classes/classSpellList.json');
 //---Helper Functions---//
 
 //writes to reply the options that a class has as their first feature 
-function chose1stFeature(chosenClass) {
+function askClassFeatures(message) {
 
 	switch (chosenClass.name) {
 
@@ -639,15 +629,13 @@ function chose1stFeature(chosenClass) {
 				index++;
 			}
 			reply += "```";
-			return true;
 			break;
 
 		default:
-			reply = "ERROR: chosenClass was believed to have 1st level feature options but does not";
+			reply = "ERROR: Chosen Class was believed to have 1st level feature options but does not";
 			break;
-
 	}
-
+	message.reply(reply)
 }
 
 //used to check if str is int [0,9]
