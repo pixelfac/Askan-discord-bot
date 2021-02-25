@@ -121,7 +121,7 @@ module.exports = {
 						message.reply(reply)
 					}
 					else {
-						message.reply("Please enter your race")
+						askRace(message)
 						currentStep += 1
 					}
 					currentStep += 1
@@ -143,7 +143,7 @@ module.exports = {
 					message.reply(reply)
 				}
 				else {
-					message.reply("Please enter your race")
+					askRace(message)
 					currentStep += 1
 				}
 				currentStep += 1
@@ -157,7 +157,7 @@ module.exports = {
 					message.channel.send(reply)
 				}
 
-				message.reply("Please enter your race")
+				askRace(message)
 				currentStep += 1
 				break;
 
@@ -1125,5 +1125,9 @@ function processClassFeatures(message) {
 	return null;
 }
 
-
+//ask for class equipment
+//see case 6
+function askRace(message) {
+	message.reply("Please enter your race")
+}
 //---Helper Functions---//
