@@ -49,8 +49,7 @@ module.exports = {
 					message.channel.send(reply)
 				}
 
-
-				message.reply("Please enter your sex: Type '1' for Male, '2' for Female\n```[1] Male\n[2]Female```")
+				askSex(message)
 				currentStep += 1
 				break;
 
@@ -908,6 +907,10 @@ function processName(message) {
 	let name = message.content.replace(/[<>:"/\\|?*]/g, "_");
 	charSheet.name = name
 	return `Your character's name is \`${name}\`.`;
+}
+
+function askSex(message) {
+	message.reply("Please enter your sex: Type '1' for Male, '2' for Female\n```[1] Male\n[2]Female```")
 }
 
 //processes sex input
