@@ -107,9 +107,7 @@ module.exports = {
 
 				//if chosenClass can cast spells, proceed as usual, otherwise skip this step
 				if (chosenClass.spellcasting) {
-					reply = `Please enter your class spells`
-					//fill in class spells
-					message.reply(reply)
+					askSpells(message)
 
 				}
 				else {
@@ -1106,6 +1104,9 @@ function processClassEqpt(message, args) {
 
 }
 
+function askSpells(message) {
+	message.reply('Please enter your class spells')
+}
 //processes class features
 //see case 6
 function processClassFeatures(message) {
