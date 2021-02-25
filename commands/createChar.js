@@ -111,9 +111,9 @@ module.exports = {
 						for (let abc in chosenClass.equipment[opt]) {
 							reply += `\`[${abc}] `
 							for (let k = 0; k < chosenClass.equipment[opt][abc].length - 1; k++) {
-								reply += `${expandDBCode(chosenClass.equipment[opt][abc][k])}, `
+								reply += `${formatItemQuantity(expandDBCode(chosenClass.equipment[opt][abc][k]))}, `
 							}
-							reply += `${expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length - 1])}\`\n`
+							reply += `${formatItemQuantity(expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length - 1]))}\`\n`
 						}
 						reply += `\n`
 					}
