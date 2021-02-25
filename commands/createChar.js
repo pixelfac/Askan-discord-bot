@@ -109,13 +109,10 @@ module.exports = {
 					else {
 						reply += `Pick equipment from the following options. You cannot mix and match options:\n`
 						for (let abc in chosenClass.equipment[opt]) {
-							console.log("opt", chosenClass.equipment[opt])
 							reply += `\`[${abc}] `
 							for (let k = 0; k < chosenClass.equipment[opt][abc].length - 1; k++) {
 								reply += `${expandDBCode(chosenClass.equipment[opt][abc][k])}, `
 							}
-							console.log("raw", chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length - 1])
-							console.log("expanded", expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length - 1]))
 							reply += `${expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length - 1])}\`\n`
 						}
 						reply += `\n`
@@ -718,14 +715,14 @@ function isValidWeaponCode(code, options) {
 	return (code.startsWith(options) && parseInt(code.substring(2)) >= 0 && parseInt(code.substring(2)) <= Object.keys(chosenClass.equipment).length) ? true : false;
 }
 
-
 //returns int
 //used to parse equipment strings
 function getQuantityFromStr(str) {
 	return parseInt(str.substring(str.lastIndexOf("x") + 1))
 }
 
-
+//pluralizes items if they are a quantity
+//EX: Arrow x10 -> 10 Arrows 
 function formatItemQuantity(str) {
 	//if str isn't in quantity format
 	if (isNaN(parseInt(str.substring(str.lastIndexOf("x") + 1))))
@@ -769,6 +766,7 @@ function getWeaponFromCode(code) {
 	return null;
 }
 
+//takes a db code and expands that into the full phrase
 function expandDBCode(str) {
 	switch (str) {
 		case 'mw':
@@ -794,7 +792,8 @@ function expandDBCode(str) {
 	}
 }
 
-
+//builds the alert to use the db command given
+//the equipment the player is to chose from
 function dbAlertFromEqpt(equipment) {
 	//total list of codes found in equipment
 	let dbCodes = [];
@@ -841,7 +840,6 @@ function dbAlertFromEqpt(equipment) {
 	return rtrnStr + "\n"
 }
 
-
 //converts cardinal # -> ordinal #
 function cardinalToOrdinal(number) {
 	let lastNumberString = number.toString().slice(-1);
@@ -861,16 +859,6 @@ function cardinalToOrdinal(number) {
 			break;
 	}
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
