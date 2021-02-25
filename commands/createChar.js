@@ -874,7 +874,8 @@ function cardinalToOrdinal(number) {
 
 
 
-
+//ask for name
+//see case 0
 function askName(message) {
 	//instantiate blank charSheet
 	charSheet = JSON.parse(JSON.stringify(templateCharSheet));
@@ -892,6 +893,8 @@ function processName(message) {
 	return `Your character's name is \`${name}\`.`;
 }
 
+//ask for sex
+//see case 1
 function askSex(message) {
 	message.reply("Please enter your sex: Type '1' for Male, '2' for Female\n```[1] Male\n[2]Female```")
 }
@@ -910,7 +913,8 @@ function processSex(message) {
 	return `Your characters sex is \`${(charSheet.sex === 1) ? 'Male' : 'Female'}\`.`
 }
 
-
+//ask for class
+//see case 2
 function askClass(message) {
 	//create and print a string of the class options
 	reply = `Please enter your class\n\`\`\``;
@@ -974,7 +978,8 @@ function processClass(message) {
 
 }
 
-
+//ask for class skills
+//see case 3
 function askClassSkills(message) {
 	reply = `Pick 2 skills from the following list. Input your choices with a space in between, i.e. \`1 3\` to pick the first and third skills\n\`\`\``
 	//prints formatted list of all skills for each class
