@@ -91,38 +91,7 @@ module.exports = {
 				}
 
 
-				reply = 'Please select your starting equipment.\n';
-
-				reply += dbAlertFromEqpt(chosenClass.equipment)
-
-				for (let opt in chosenClass.equipment) {
-					//free if it exists, add those items in this format
-					if (opt === 'free') {
-						reply += `The following item(s) are given to you for free:\n`
-						for (let j = 0; j < chosenClass.equipment.free.length - 1; j++) {
-							reply += `\`${chosenClass.equipment.free[j]}\`, `
-						}
-						reply += `\`${chosenClass.equipment.free[chosenClass.equipment.free.length - 1]}\`\n\n`
-
-					}
-					//if opt1, opt2, etc.
-					else {
-						reply += `Pick equipment from the following options. You cannot mix and match options:\n`
-						for (let abc in chosenClass.equipment[opt]) {
-							reply += `\`[${abc}] `
-							for (let k = 0; k < chosenClass.equipment[opt][abc].length - 1; k++) {
-								reply += `${formatItemQuantity(expandDBCode(chosenClass.equipment[opt][abc][k]))}, `
-							}
-							reply += `${formatItemQuantity(expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length - 1]))}\`\n`
-						}
-						reply += `\n`
-					}
-				}
-
-
-
-
-				message.reply(reply)
+				askClassEqpt(message)
 				currentStep += 1
 				break;
 
@@ -1030,6 +999,39 @@ function processClassSkills(message, args) {
 
 }
 
+//ask for class equipment
+//see case 4
+function askClassEqpt(message) {
+	reply = 'Please select your starting equipment.\n';
+
+	reply += dbAlertFromEqpt(chosenClass.equipment)
+
+	for (let opt in chosenClass.equipment) {
+		//free if it exists, add those items in this format
+		if (opt === 'free') {
+			reply += `The following item(s) are given to you for free:\n`
+			for (let j = 0; j < chosenClass.equipment.free.length - 1; j++) {
+				reply += `\`${chosenClass.equipment.free[j]}\`, `
+			}
+			reply += `\`${chosenClass.equipment.free[chosenClass.equipment.free.length - 1]}\`\n\n`
+
+		}
+		//if opt1, opt2, etc.
+		else {
+			reply += `Pick equipment from the following options. You cannot mix and match options:\n`
+			for (let abc in chosenClass.equipment[opt]) {
+				reply += `\`[${abc}] `
+				for (let k = 0; k < chosenClass.equipment[opt][abc].length - 1; k++) {
+					reply += `${formatItemQuantity(expandDBCode(chosenClass.equipment[opt][abc][k]))}, `
+				}
+				reply += `${formatItemQuantity(expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length - 1]))}\`\n`
+			}
+			reply += `\n`
+		}
+	}
+
+	message.reply(reply)
+}
 //processes class equipment input
 //see case 5
 function processClassEqpt(message, args) {
