@@ -131,10 +131,13 @@ module.exports = {
 					else {
 						reply += `Pick equipment from the following options. You cannot mix and match options:\n`
 						for (let abc in chosenClass.equipment[opt]) {
+							console.log("opt", chosenClass.equipment[opt])
 							reply += `\`[${abc}] `
 							for (let k=0; k < chosenClass.equipment[opt][abc].length-1; k++) {
 								reply += `${expandDBCode(chosenClass.equipment[opt][abc][k])}, `
 							}
+							console.log("raw", chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length-1])
+							console.log("expanded", expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length-1]))
 							reply += `${expandDBCode(chosenClass.equipment[opt][abc][chosenClass.equipment[opt][abc].length-1])}\`\n`
 						}
 						reply += `\n`
@@ -790,10 +793,14 @@ function getWeaponFromCode(code) {
 
 function expandDBCode(str) {
 	switch (str) {
+		case 'mw':
+			return 'Any Martial Ranged or Melee Weapon'
 		case 'mm':
 			return 'Any Martial Melee Weapon'
 		case 'mr':
 			return 'Any Martial Ranged Weapon'
+		case 'sw':
+			return 'Any Simple Ranged or Melee Weapon'
 		case 'sm':
 			return 'Any Simple Melee Weapon'
 		case 'sr':
