@@ -61,15 +61,7 @@ module.exports = {
 					message.channel.send(reply) 
 				}
 
-				//create and print a string of the class options
-				reply = `Please enter your class\n\`\`\``;
-				index = 1;
-				for (let cls in classes) {
-					reply += `[${index}] ${classes[cls].name}\n`
-					index++;
-				}
-				reply += `\`\`\``;
-				message.reply(reply)
+				askClass(message)
 				currentStep += 1
 				break;
 
@@ -925,6 +917,19 @@ function processSex(message) {
 		return null;
 	}
 	return `Your characters sex is \`${(charSheet.sex === 1) ? 'Male':'Female'}\`.`
+}
+
+
+function askClass(message) {
+	//create and print a string of the class options
+	reply = `Please enter your class\n\`\`\``;
+	index = 1;
+	for (let cls in classes) {
+		reply += `[${index}] ${classes[cls].name}\n`
+		index++;
+	}
+	reply += `\`\`\``;
+	message.reply(reply)
 }
 
 //processes class input
