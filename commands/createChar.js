@@ -615,28 +615,7 @@ const classSpellList = require('../Dnd_classes/classSpellList.json');
 
 //---Helper Functions---//
 
-//writes to reply the options that a class has as their first feature 
-function askClassFeatures(message) {
 
-	switch (chosenClass.name) {
-
-		case "Fighter":
-			reply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n```";
-
-			index = 1;
-			for (let style in chosenClass.features.choselvl1) {
-				reply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n\n`
-				index++;
-			}
-			reply += "```";
-			break;
-
-		default:
-			reply = "ERROR: Chosen Class was believed to have 1st level feature options but does not";
-			break;
-	}
-	message.reply(reply)
-}
 
 //used to check if str is int [0,9]
 function isNatNum(str) {
@@ -814,8 +793,6 @@ function cardinalToOrdinal(number) {
 			break;
 	}
 }
-
-
 
 //ask for name
 //see case 0
@@ -1018,6 +995,7 @@ function askClassEqpt(message) {
 
 	message.reply(reply)
 }
+
 //processes class equipment input
 //see case 5
 function processClassEqpt(message, args) {
@@ -1092,11 +1070,44 @@ function processClassEqpt(message, args) {
 
 }
 
+//ask for spells
+//see case 5
 function askSpells(message) {
 	message.reply('Please enter your class spells')
 }
-//processes class features
+
+//processes spells
 //see case 6
+function processSpells(message) {
+	//TODO
+}
+
+//ask for class features
+//see case 6
+function askClassFeatures(message) {
+
+	switch (chosenClass.name) {
+
+		case "Fighter":
+			reply = "The Fighter class lets you chose a fighting style at 1st level. Pick one of the following class features:\n```";
+
+			index = 1;
+			for (let style in chosenClass.features.choselvl1) {
+				reply += `[${index}] ${style}: ${chosenClass.features.choselvl1[style].desc}\n\n`
+				index++;
+			}
+			reply += "```";
+			break;
+
+		default:
+			reply = "ERROR: Chosen Class was believed to have 1st level feature options but does not";
+			break;
+	}
+	message.reply(reply)
+}
+
+//processes class features
+//see case 7
 function processClassFeatures(message) {
 	index = 1;
 	//switch used to detect if user inputed valid option
