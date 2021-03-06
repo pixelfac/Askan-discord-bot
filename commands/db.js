@@ -15,9 +15,11 @@ module.exports = {
 		}
 
 		if (args[0] == 'help' || args[0] == undefined) {
-			message.channel.send("This command takes a category and returns the codes of all the items in that category. These codes are used for inputting selections into this bot, like in the 'createChar' command.")
+			message.channel.send(`This command takes a category and returns the codes of all the items in that category. These codes are used for inputting selections into this bot, like in the 'createChar' command.\nUse \`${prefix}db list\` to see all available arguments`)
 			return;
 		}
+
+		if (args[0] == 'list')
 
 
 		message.channel.send(`I don't know what database entry has the name: \`${args[0]}\`.`)
