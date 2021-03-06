@@ -14,7 +14,7 @@ module.exports = {
 			}
 		}
 
-		if (args[0] == 'help') {
+		if (args[0] == 'help' || args[0] == undefined) {
 			message.channel.send("This command takes a category and returns the codes of all the items in that category. These codes are used for inputting selections into this bot, like in the 'createChar' command.")
 			return;
 		}
