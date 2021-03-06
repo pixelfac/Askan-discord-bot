@@ -8,7 +8,7 @@ module.exports = {
 		for (let list in listsOfItems) {
 			console.log(listsOfItems[list].header)
 			if (args[0] === listsOfItems[list].header) {
-				buildList(listsOfItems[list])
+				reply == buildList(listsOfItems[list])
 				message.channel.send(reply)
 				return;
 			}
@@ -55,4 +55,5 @@ function buildList(object) {
 	}
 
 	reply += "```"
+	return reply
 }
