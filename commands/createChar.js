@@ -34,9 +34,6 @@ module.exports = {
 		dndmode = true;
 
 
-
-
-
 		switch (currentStep) {
 
 			case 0:
@@ -317,6 +314,8 @@ var reply = "";
 
 const { token, prefix } = require('../config.json');
 const fs = require('fs');
+
+const spells = require('../Dnd_spells/spells.json')
 
 //import weapon json arrays
 const martialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons.json');
