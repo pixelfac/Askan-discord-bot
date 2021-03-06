@@ -323,11 +323,11 @@ const martialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons.json
 const simpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons.json');
 const simpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons.json');
 
-//assigns all arrays of weapon classes
-const allMartialMeleeWeapons = require('../Dnd_equipment/martialMeleeWeapons_WithCodes.json')
-const allMartialRangedWeapons = require('../Dnd_equipment/martialRangedWeapons_WithCodes.json');
-const allSimpleMeleeWeapons = require('../Dnd_equipment/simpleMeleeWeapons_WithCodes.json');
-const allSimpleRangedWeapons = require('../Dnd_equipment/simpleRangedWeapons_WithCodes.json');
+//assigns codes for weapon classes
+const martialMeleeWeaponsCodes = require('../Dnd_equipment/martialMeleeWeapons_WithCodes.json')
+const martialRangedWeaponsCodes = require('../Dnd_equipment/martialRangedWeapons_WithCodes.json');
+const simpleMeleeWeaponsCodes = require('../Dnd_equipment/simpleMeleeWeapons_WithCodes.json');
+const simpleRangedWeaponsCodes = require('../Dnd_equipment/simpleRangedWeapons_WithCodes.json');
 
 // Character Creation Enum
 const createCharSteps = ["NAME", "SEX", "CLASS", "CLASS_skills", "CLASS_equipment", "CLASS_spells", "CLASS_feature", "RACE",
@@ -540,19 +540,19 @@ function getWeaponFromCode(code) {
 	switch (code.substr(0, 2)) {
 
 		case "mm":
-			weaponJSON = allMartialMeleeWeapons;
+			weaponJSON = martialMeleeWeaponsCodes;
 			break;
 
 		case "mr":
-			weaponJSON = allMartialRangedWeapons;
+			weaponJSON = martialRangedWeaponsCodes;
 			break;
 
 		case "sm":
-			weaponJSON = allSimpleMeleeWeapons;
+			weaponJSON = simpleMeleeWeaponsCodes;
 			break;
 
 		case "sr":
-			weaponJSON = allSimpleRangedWeapons;
+			weaponJSON = simpleRangedWeaponsCodes;
 
 		default:
 			//error no match found
