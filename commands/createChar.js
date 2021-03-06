@@ -430,8 +430,9 @@ const templateRace = {
 }
 
 //import all race require() objects
-const dwarf = require("../Dnd_races/dwarf.json");
-const elf = require("../Dnd_races/elf.json");
+const races = {}
+races.dwarf = require("../Dnd_races/dwarf.json");
+races.elf = require("../Dnd_races/elf.json");
 
 //---Race Info---//
 
@@ -472,7 +473,7 @@ const templateClass = {
 
 }
 
-const classes = { }
+const classes = {}
 classes.fighter = require('../Dnd_classes/fighter.json')
 
 
@@ -992,10 +993,18 @@ function processClassFeatures(message) {
 	return null;
 }
 
-//ask for class equipment
-//see case 6
+//ask for race
+//see case 7
 function askRace(message) {
-	message.reply("Please enter your race")
+	//create and print a string of the race options
+	reply = `Please enter your race\n\`\`\``;
+	index = 1;
+	for (let race in races) {
+		reply += `[${index}] ${races[race].name}\n`
+		index++;
+	}
+	reply += `\`\`\``;
+	message.reply(reply)
 }
 
 
