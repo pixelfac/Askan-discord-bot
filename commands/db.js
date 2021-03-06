@@ -4,7 +4,7 @@ module.exports = {
 	name: "db",
 	description: "database reference of Dnd terms and info",
 	execute(prefix, message, args) {
-	
+
 		for (let list in listsOfItems) {
 			console.log(listsOfItems[list].header)
 			if (args[0] === listsOfItems[list].header) {
@@ -15,15 +15,32 @@ module.exports = {
 		}
 
 		if (args[0] == 'help' || args[0] == undefined) {
-			message.channel.send(`This command takes a category and returns the codes of all the items in that category. These codes are used for inputting selections into this bot, like in the 'createChar' command.\nUse \`${prefix}db list\` to see all available arguments`)
+			reply = `This command takes a category and returns the codes of all the items in that category.\nThese codes are used for inputting selections into this bot, like in the 'createChar' command.\nHere are all the currently available arguments\n\`\`\``
+
+			for (let list in listsOfItems)
+				reply += listsOfItems[list].ListName + " : " + listsOfItems[list].header + "\n"
+
+			reply += "```"
+
+			message.channel.send(reply)
 			return;
 		}
 
-		if (args[0] == 'list')
+		if (args[0] == 'list') {
+			reply = "List of all available arguments:\n```"
+
+			for (let list in listsOfItems)
+				reply += listsOfItems[list].header + "\n"
+
+			reply += "```"
+
+			message.channel.send(reply)
+			return;
+		}
 
 
 		message.channel.send(`I don't know what database entry has the name: \`${args[0]}\`.`)
-    },
+	},
 };
 
 // File-Scope Variables
@@ -31,13 +48,13 @@ var reply = ``;
 
 
 //import JSONs of all lists of weapons
-var listsOfItems = { }
+var listsOfItems = {}
 
 var codeFiles = fs.readdirSync('./Dnd_equipment').filter(file => file.endsWith('_WithCodes.json'));
 
 for (let filename of codeFiles) {
-   let codeJSON = require(`../Dnd_equipment/${filename}`);
-   listsOfItems[filename] = codeJSON;
+	let codeJSON = require(`../Dnd_equipment/${filename}`);
+	listsOfItems[filename] = codeJSON;
 }
 
 //builds string of all items and codes formatted
