@@ -312,7 +312,7 @@ var reply = "";
 
 //---Init Stuff---//
 
-const { token, prefix } = require('../config.json');
+const { prefix } = require('../config.json');
 const fs = require('fs');
 
 const spells = require('../Dnd_spells/spells.json')
